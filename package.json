@@ -1,0 +1,22 @@
+{
+  "name": "uclalibrary-viewer",
+  "version": "1.0.0",
+  "description": "UCLA Library distribution of http://universalviewer.io/",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/UCLALibrary/UniversalViewer.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/UCLALibrary/UniversalViewer/issues"
+  },
+  "homepage": "https://github.com/UCLALibrary/UniversalViewer#readme",
+  "dependencies": {
+    "universalviewer": "^4.0.0-pre.8"
+  }
+}
