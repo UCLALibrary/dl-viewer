@@ -1,0 +1,26 @@
+language: node_js
+dist: xenial
+os: linux
+
+node_js:
+  - '8.9.1'
+  # https://github.com/UniversalViewer/universalviewer/blob/d8f9ec7f1fb1beeb9e6198ca4f27e189aea92b00/.travis.yml#L2-L3
+
+script:
+  - sh ./build.sh
+
+deploy:
+  provider: s3
+  edge: true # opt in to dpl v2
+  # https://docs.travis-ci.com/user/deployment/s3/
+  # > The next major version dpl v2 will be released soon, and we recommend starting to use it
+  # REQUIRED
+  # access_key_id: ${AWS_ACCESS_KEY_ID}
+  # secret_access_key: ${AWS_SECRET_ACCESS_KEY}
+  region: us-west-2
+  bucket: dl-viewer
+  # Optional
+  local_dir: dist
+  # upload_dir: ${TRAVIS_BRANCH}
+  on:
+   all_branches: true
