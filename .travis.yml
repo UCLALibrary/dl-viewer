@@ -22,6 +22,8 @@ deploy:
     # Optional
     local_dir: dist
     upload_dir: prod
+    on:
+      branch: main
 
   - provider: s3
     edge: true # opt in to dpl v2
