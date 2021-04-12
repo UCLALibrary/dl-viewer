@@ -14,9 +14,47 @@
 			https://github.com/google/model-viewer/issues/1088#issuecomment-599237719
 		-->
   <script src="https://unpkg.com/resize-observer-polyfill@1.5.1/dist/ResizeObserver.js"></script>
-  <script type="text/javascript" src="uv-assets/js/bundle.js"></script>
-  <script type="text/javascript" src="uv-helpers.js"></script>
-  <script type="text/javascript" src="uv-dist-umd/UV.js"></script>
+  <script src="lib/offline.js"></script>
+  <script src="helpers.js"></script>
+  <script type="text/javascript">
+    window.addEventListener('uvLoaded', function (e) {
+      urlDataProvider = new UV.URLDataProvider(true);
+      var formattedLocales;
+      var locales = urlDataProvider.get("locales", "");
+
+      if (locales) {
+        var names = locales.split(",");
+        formattedLocales = [];
+
+        for (var i in names) {
+          var nameparts = String(names[i]).split(":");
+          formattedLocales[i] = {
+            name: nameparts[0],
+            label: nameparts[1]
+          };
+        }
+      } else {
+        formattedLocales = [{
+          name: "en-GB"
+        }];
+      }
+
+      uv = createUV('#uv', {
+        root: '.',
+        iiifResourceUri: urlDataProvider.get('manifest'),
+        configUri: 'uv-config.json',
+        collectionIndex: Number(urlDataProvider.get('c', 0)),
+        manifestIndex: Number(urlDataProvider.get('m', 0)),
+        sequenceIndex: Number(urlDataProvider.get('s', 0)),
+        canvasIndex: Number(urlDataProvider.get('cv', 0)),
+        rangeId: urlDataProvider.get('rid', 0),
+        rotation: Number(urlDataProvider.get('r', 0)),
+        xywh: urlDataProvider.get('xywh', ''),
+        embedded: true,
+        locales: formattedLocales
+      }, urlDataProvider);
+    }, false);
+  </script>
   <style>
     body {
       margin: 0;
@@ -28,46 +66,6 @@
 
 <body>
   <div id="uv" class="uv"></div>
-
-  <script type="text/javascript">
-    urlDataProvider = new UV.URLDataProvider(true);
-    var formattedLocales;
-    var locales = urlDataProvider.get("locales", "");
-
-    if (locales) {
-      var names = locales.split(",");
-      formattedLocales = [];
-
-      for (var i in names) {
-        var nameparts = String(names[i]).split(":");
-        formattedLocales[i] = {
-          name: nameparts[0],
-          label: nameparts[1]
-        };
-      }
-    } else {
-      formattedLocales = [{
-        name: "en-GB"
-      }];
-    }
-
-    uv = createUV(
-      "uv", {
-        manifestUri: urlDataProvider.get("manifest"),
-        configUri: urlDataProvider.get("config", 'uv-config.json'),
-        collectionIndex: Number(urlDataProvider.get("c", 0)),
-        manifestIndex: Number(urlDataProvider.get("m", 0)),
-        sequenceIndex: Number(urlDataProvider.get("s", 0)),
-        canvasIndex: Number(urlDataProvider.get("cv", 0)),
-        rangeId: urlDataProvider.get("rid", 0),
-        rotation: Number(urlDataProvider.get("r", 0)),
-        xywh: urlDataProvider.get("xywh", ""),
-        embedded: true,
-        locales: formattedLocales
-      },
-      urlDataProvider
-    );
-  </script>
 
   <script>
     $(function () {
@@ -87,6 +85,8 @@
       resize();
     });
   </script>
+
+  <script src="uv.js"></script>
 </body>
 
 </html>

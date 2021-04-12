@@ -17,6 +17,6 @@
   },
   "homepage": "https://github.com/UCLALibrary/UniversalViewer#readme",
   "dependencies": {
-    "universalviewer": "^4.0.0-pre.8"
+    "universalviewer": "^3.1"
   }
 }
