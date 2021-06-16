@@ -8,15 +8,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/UCLALibrary/UniversalViewer.git"
+    "url": "git+https://github.com/UCLALibrary/dl-viewer.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/UCLALibrary/UniversalViewer/issues"
+    "url": "https://github.com/UCLALibrary/dl-viewer/issues"
   },
-  "homepage": "https://github.com/UCLALibrary/UniversalViewer#readme",
+  "homepage": "https://github.com/UCLALibrary/dl-viewer#readme",
   "dependencies": {
-    "universalviewer": "^3.1"
+    "universalviewer": "^3.1.2"
   }
 }
