@@ -4,11 +4,13 @@
     },
     "modules": {
         "footerPanel": {
-            "options": {
-                "downloadEnabled": true,
-                "fullscreenEnabled": true,
-                "shareEnabled": false
+            "options": 
+            {
+              "downloadEnabled": true,
+              "fullscreenEnabled": true,
+              "moreInfoEnabled": false,
+              "printEnabled": true,
+              "shareEnabled": false
             }
         }
     }
-}
