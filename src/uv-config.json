@@ -12,7 +12,6 @@
           "options": 
           {
             "downloadEnabled": true,
-            "fullscreenEnabled": true,
             "moreInfoEnabled": false,
             "printEnabled": true,
             "shareEnabled": false
@@ -20,10 +19,6 @@
           "content": {
             "bookmark": "Add to bookmarks",
             "download": "Download ",
-            "embed": "Embed",
-            "feedback": "Feedback",
-            "exitFullScreen": "",
-            "fullScreen": "",
             "open": "Open",
             "share": "Share"
           }
