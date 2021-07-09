@@ -17,11 +17,10 @@
             "shareEnabled": false
           },
           "content": {
-            "bookmark": "Add to bookmarks",
             "download": "Download ",
-            "open": "Open",
-            "share": "Share"
-          }
+            "exitFullScreen": "Exit Full Screen",
+            "fullScreen": "Full Screen"
+            }
       },
       "downloadDialogue": {
         "options": {
