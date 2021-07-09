@@ -13,7 +13,7 @@
           {
             "downloadEnabled": true,
             "moreInfoEnabled": false,
-            "printEnabled": true,
+            "printEnabled": false,
             "shareEnabled": false
           },
           "content": {
