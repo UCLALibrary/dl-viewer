@@ -53,7 +53,10 @@
         embedded: true,
         locales: formattedLocales
       }, urlDataProvider);
-      alert("test");
+      myUV.on("created", function(obj) {
+        alert("test2");
+            });
+
     }, false);
   </script>
   <style>
