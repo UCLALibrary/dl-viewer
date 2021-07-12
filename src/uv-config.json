@@ -28,7 +28,7 @@
           "currentViewDisabledPercentage": 90,
           "maxImageWidth": 5000,
           "optionsExplanatoryTextEnabled": true,
-          "selectionEnabled": true
+          "selectionEnabled": false
         }
       }
     }
