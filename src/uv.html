@@ -53,10 +53,11 @@
         embedded: true,
         locales: formattedLocales
       }, urlDataProvider);
-      myUV.on("created", function(obj) {
-        alert("test2");
-            });
 
+      myUV.on("created", function(obj) {
+                if (document.getElementsByClassName("av-icon av-icon-play play")[0]) {
+                }
+            });
     }, false);
   </script>
   <style>
