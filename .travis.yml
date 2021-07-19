@@ -1,0 +1,56 @@
+language: node_js
+dist: xenial
+os: linux
+
+node_js:
+  - 'v14.17.4'
+  # https://github.com/UniversalViewer/universalviewer/blob/d8f9ec7f1fb1beeb9e6198ca4f27e189aea92b00/.travis.yml#L2-L3
+
+script:
+  - npm run build
+
+deploy:
+  - provider: s3
+    edge: true # opt in to dpl v2
+    # https://docs.travis-ci.com/user/deployment/s3/
+    # > The next major version dpl v2 will be released soon, and we recommend starting to use it
+    # REQUIRED
+    # access_key_id: ${AWS_ACCESS_KEY_ID}
+    # secret_access_key: ${AWS_SECRET_ACCESS_KEY}
+    region: us-west-2
+    bucket: dl-viewer
+    # Optional
+    local_dir: dist
+    upload_dir: prod
+    on:
+      branch: main
+
+  - provider: s3
+    edge: true # opt in to dpl v2
+    region: us-west-2
+    bucket: dl-viewer
+    local_dir: dist
+    upload_dir: dev
+    on:
+      all_branches: true
+      condition: $TRAVIS_BRANCH == dev || $TRAVIS_BRANCH == dev-*
+
+  - provider: s3
+    edge: true # opt in to dpl v2
+    region: us-west-2
+    bucket: dl-viewer
+    local_dir: dist
+    upload_dir: test
+    on:
+      all_branches: true
+      condition: $TRAVIS_BRANCH == test || $TRAVIS_BRANCH == test-*
+
+  - provider: s3
+    edge: true # opt in to dpl v2
+    region: us-west-2
+    bucket: dl-viewer
+    local_dir: dist
+    upload_dir: stage
+    on:
+      all_branches: true
+      condition: $TRAVIS_BRANCH == stage || $TRAVIS_BRANCH == stage-*

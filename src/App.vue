@@ -1,26 +1,29 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Welcome to Your Vue.js App" />
+  <DLViewer :iiif_manifest_url="iiif_manifest_url" />
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
+import DLViewer from "./components/DLViewer.vue";
 
 export default {
   name: "App",
   components: {
-    HelloWorld,
+    DLViewer,
+  },
+  computed: {
+    iiif_manifest_url: function () {
+      const fixed_url = new URL(window.location.toString().replace("#?", "?")); // for some reason the URL format we inherited used '#?' to indicate query parameters, but URLSearchParams won't parse this.
+      return fixed_url.searchParams.get("manifest");
+    },
   },
 };
 </script>
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  margin: 0px;
+  padding: 0px;
+  height: 100%;
+  width: 100%;
 }
 </style>
