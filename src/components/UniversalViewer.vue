@@ -105,6 +105,8 @@ export default {
     let uvScript = document.createElement("script");
     uvScript.setAttribute("src", "/uv/uv.js");
     document.body.appendChild(uvScript);
+
+    // window.addEventListener("uvLoaded", this.loadUV, false);
   }
 };
 </script>

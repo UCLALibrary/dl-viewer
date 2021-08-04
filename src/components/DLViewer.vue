@@ -47,6 +47,8 @@ export default {
   },
   async beforeCreate() {
     try {
+      console.log("encode" + encodeURIComponent(this.iiif_manifest_url));
+
       const response = await axios.get(this.iiif_manifest_url);
       console.log(response.data);
       this.iiif_manifest = response.data;
@@ -59,7 +61,7 @@ export default {
           this.media = "Image";
       }
     } catch (error) {
-      console.log(error);
+      console.log(error.response.data);
     }
   },
 };
