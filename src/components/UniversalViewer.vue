@@ -81,21 +81,17 @@ export default {
   // TODO: integrate UV into webpack build, instead of just jury-rigging <script> tags
   // TODO: Pass manifest && config options as parameters, instead of getting them from URL (only <App> should look at URL)
   mounted() {
-    // let jqueryScript = document.createElement("script");
-    // jqueryScript.setAttribute(
-    //   "src",
-    //   "https://code.jquery.com/jquery-3.6.0.min.js"
-    // );
-    //
-    // jqueryScript.setAttribute(
-    //   "integrity",
-    //   "sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
-    // );
-    // jqueryScript.setAttribute("crossorigin", "anonymous");
-    // document.head.appendChild(jqueryScript);
-
     let jqueryScript = document.createElement("script");
-    jqueryScript.setAttribute("src", "/jquery/jquery.js");
+    jqueryScript.setAttribute(
+      "src",
+      "https://code.jquery.com/jquery-3.6.0.min.js"
+    );
+
+    jqueryScript.setAttribute(
+      "integrity",
+      "sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+    );
+    jqueryScript.setAttribute("crossorigin", "anonymous");
     document.head.appendChild(jqueryScript);
 
     let offlineScript = document.createElement("script");

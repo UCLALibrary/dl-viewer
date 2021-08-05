@@ -1,13 +1,13 @@
 <template>
   <div class="dl-viewer">
     <MejsPlayer v-if="isVideo" :src="srcUrl" />
-    <UniversalViewer
+    <!-- <UniversalViewer
       v-else
       :iiif_manifest="iiif_manifest"
       :iiif_manifest_url="iiif_manifest_url"
       :media="media"
       :uv_config="parseConfig"
-    />
+    /> -->
   </div>
 </template>
 
@@ -15,13 +15,13 @@
 /* eslint-disable */
 
 import MejsPlayer from "./MejsPlayer.vue";
-import UniversalViewer from "./UniversalViewer.vue"; // TODO: set up code splitting. Might need to move this?
+// import UniversalViewer from "./UniversalViewer.vue"; // TODO: set up code splitting. Might need to move this?
 import axios from "axios";
 export default {
   name: "DLViewer",
   components: {
-    MejsPlayer,
-    UniversalViewer
+    MejsPlayer
+    // UniversalViewer
   },
   props: {
     iiif_manifest_url: {
