@@ -12,6 +12,8 @@
 </template>
 
 <script>
+/* eslint-disable */
+
 import MejsPlayer from "./MejsPlayer.vue";
 import UniversalViewer from "./UniversalViewer.vue"; // TODO: set up code splitting. Might need to move this?
 import axios from "axios";
@@ -19,13 +21,13 @@ export default {
   name: "DLViewer",
   components: {
     MejsPlayer,
-    UniversalViewer,
+    UniversalViewer
   },
   props: {
     iiif_manifest_url: {
       type: String,
-      required: true,
-    },
+      required: true
+    }
   },
   computed: {
     isVideo() {
@@ -41,19 +43,33 @@ export default {
           return "no-download-uv-config.json"; // `${window.location.protocol}//${window.location.hostname}:${window.location.port}/`;
       }
     },
-    srcUrl() {
-      return this.iiif_manifest.items[0].items[0].items[0].body[0].id;
+    isSafariIos() {
+      let output = false;
+      let isSafari = !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/);
+      let iOS =
+        /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+      if (isSafari || iOS) {
+        output = true;
+      }
+      return output;
     },
+    srcUrl() {
+      if (this.isSafariIos === true) {
+        return this.iiif_manifest.items[0].items[0].items[0].body[1].id;
+      } else {
+        return this.iiif_manifest.items[0].items[0].items[0].body[0].id;
+      }
+    }
   },
   data() {
     return { iiif_manifest: {}, media: "" };
   },
   async beforeCreate() {
     try {
-      console.log("encode" + encodeURIComponent(this.iiif_manifest_url));
+      // console.log("encode" + encodeURIComponent(this.iiif_manifest_url));
 
       const response = await axios.get(this.iiif_manifest_url);
-      console.log(response.data);
+      // console.log(response.data);
       this.iiif_manifest = response.data;
       switch (this.iiif_manifest["@context"]) {
         case "http://iiif.io/api/presentation/3/context.json":
@@ -66,7 +82,7 @@ export default {
     } catch (error) {
       console.log(error.response.data);
     }
-  },
+  }
 };
 </script>
 

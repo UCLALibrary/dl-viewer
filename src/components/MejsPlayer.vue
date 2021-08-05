@@ -22,6 +22,10 @@ export default {
       type: String,
       default: "",
     },
+    userAgentDevice: {
+      type: String,
+      default: "",
+    },
   },
   mounted() {
     let mejsScript = document.createElement("script");
@@ -29,8 +33,21 @@ export default {
     document.head.appendChild(mejsScript);
 
     let jqueryScript = document.createElement("script");
-    jqueryScript.setAttribute("src", "/jquery/jquery.js");
+    jqueryScript.setAttribute(
+      "src",
+      "https://code.jquery.com/jquery-3.6.0.min.js"
+    );
+
+    jqueryScript.setAttribute(
+      "integrity",
+      "sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+    );
+    jqueryScript.setAttribute("crossorigin", "anonymous");
     document.head.appendChild(jqueryScript);
+
+    // let jqueryScript = document.createElement("script");
+    // jqueryScript.setAttribute("src", "/jquery/jquery.js");
+    // document.head.appendChild(jqueryScript);
   },
 };
 </script>
