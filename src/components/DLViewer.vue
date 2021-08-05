@@ -1,6 +1,6 @@
 <template>
   <div class="dl-viewer">
-    <MejsPlayer v-if="isVideo" :src="srcUrl" />
+    <MejsPlayer v-if="isVideo" :src="src" />
     <!-- <UniversalViewer
       v-else
       :iiif_manifest="iiif_manifest"
@@ -42,27 +42,10 @@ export default {
         default:
           return "no-download-uv-config.json"; // `${window.location.protocol}//${window.location.hostname}:${window.location.port}/`;
       }
-    },
-    isSafariIos() {
-      let output = false;
-      let isSafari = !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/);
-      let iOS =
-        /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-      if (isSafari || iOS) {
-        output = true;
-      }
-      return output;
-    },
-    srcUrl() {
-      if (this.isSafariIos === true) {
-        return this.iiif_manifest.items[0].items[0].items[0].body[1].id;
-      } else {
-        return this.iiif_manifest.items[0].items[0].items[0].body[0].id;
-      }
     }
   },
   data() {
-    return { iiif_manifest: {}, media: "" };
+    return { iiif_manifest: {}, media: "", src: "" };
   },
   async beforeCreate() {
     try {
@@ -71,6 +54,20 @@ export default {
       const response = await axios.get(this.iiif_manifest_url);
       // console.log(response.data);
       this.iiif_manifest = response.data;
+      let output = false;
+      let isSafari = !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/);
+      let iOS =
+        /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+      if (isSafari || iOS) {
+        output = true;
+      }
+
+      if (output === true) {
+        this.src = this.iiif_manifest.items[0].items[0].items[0].body[1].id;
+      } else {
+        this.src = this.iiif_manifest.items[0].items[0].items[0].body[0].id;
+      }
+      console.log("src  from wowza" + this.src);
       switch (this.iiif_manifest["@context"]) {
         case "http://iiif.io/api/presentation/3/context.json":
           this.media =
@@ -80,7 +77,7 @@ export default {
           this.media = "Image";
       }
     } catch (error) {
-      console.log(error.response.data);
+      console.log(error.response);
     }
   }
 };
