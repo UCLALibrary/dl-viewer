@@ -5,6 +5,8 @@
       v-else
       :iiif_manifest="iiif_manifest"
       :iiif_manifest_url="iiif_manifest_url"
+      :media="media"
+      :uv_config="parseConfig"
     />
   </div>
 </template>
@@ -13,7 +15,6 @@
 import MEJS from "./MEJS.vue";
 import UniversalViewer from "./UniversalViewer.vue"; // TODO: set up code splitting. Might need to move this?
 import axios from "axios";
-
 export default {
   name: "DLViewer",
   components: {
@@ -28,33 +29,40 @@ export default {
   },
   computed: {
     isVideo() {
-      return this.mediaType == "Video";
+      return this.media == "Video";
     },
-    mediaType() {
-      // Manifest hasn't loaded yet or we can't determine IIIF presentation API version
-      if (!this.iiif_manifest || !this.iiif_manifest["@context"]) {
-        return "unknown";
-      }
 
-      // First check IIIF API version
-      switch (this.iiif_manifest["@context"]) {
-        case "http://iiif.io/api/presentation/3/context.json":
-          return this.iiif_manifest.items[0].items[0].items[0].body[0].type;
+    parseConfig() {
+      switch (this.media) {
+        case "Image":
+          return "uv-config.json"; // `${window.location.protocol}//${window.location.hostname}:${window.location.port}/uv-config.json`;
+
         default:
-          return "Image";
+          return "no-download-uv-config.json"; // `${window.location.protocol}//${window.location.hostname}:${window.location.port}/`;
       }
     },
   },
   data() {
-    return { iiif_manifest: {} };
+    return { iiif_manifest: {}, media: "" };
   },
-  created() {
-    axios
-      .get(this.iiif_manifest_url)
-      .then((response) => (this.iiif_manifest = response.data))
-      .catch((error) => {
-        console.log(error);
-      });
+  async beforeCreate() {
+    try {
+      console.log("encode" + encodeURIComponent(this.iiif_manifest_url));
+
+      const response = await axios.get(this.iiif_manifest_url);
+      console.log(response.data);
+      this.iiif_manifest = response.data;
+      switch (this.iiif_manifest["@context"]) {
+        case "http://iiif.io/api/presentation/3/context.json":
+          this.media =
+            this.iiif_manifest.items[0].items[0].items[0].body[0].type;
+          break;
+        default:
+          this.media = "Image";
+      }
+    } catch (error) {
+      console.log(error.response.data);
+    }
   },
 };
 </script>

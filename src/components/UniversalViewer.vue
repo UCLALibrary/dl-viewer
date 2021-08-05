@@ -9,21 +9,24 @@ export default {
   props: {
     iiif_manifest: {
       type: Object,
-      required: true,
+      required: true
+    },
+    media: {
+      type: String,
+      required: true
+    },
+    iiif_manifest_url: {
+      type: String,
+      required: true
+    },
+    uv_config: {
+      type: String,
+      required: true
     }
   },
-  // TODO: integrate UV into webpack build, instead of just jury-rigging <script> tags
-  // TODO: Pass manifest && config options as parameters, instead of getting them from URL (only <App> should look at URL)
-  mounted() {
-    let offlineScript = document.createElement('script')
-    offlineScript.setAttribute('src', '/uv/lib/offline.js')
-    document.head.appendChild(offlineScript)
-
-    let helpersSript = document.createElement('script')
-    helpersSript.setAttribute('src', '/uv/helpers.js')
-    document.head.appendChild(helpersSript)
-
-    window.addEventListener('uvLoaded', function (e) {
+  methods: {
+    loadUV(e) {
+      console.log("in loaduv");
       const urlDataProvider = new UV.URLDataProvider(true);
       var formattedLocales;
       var locales = urlDataProvider.get("locales", "");
@@ -40,30 +43,70 @@ export default {
           };
         }
       } else {
-        formattedLocales = [{
-          name: "en-GB"
-        }];
+        formattedLocales = [
+          {
+            name: "en-GB"
+          }
+        ];
       }
+      console.log("manifest url" + urlDataProvider);
+      let uv = createUV(
+        "#uv",
+        {
+          root: "./uv/",
+          iiifResourceUri: this.iiif_manifest_url,
+          configUri: this.uv_config,
+          collectionIndex: Number(urlDataProvider.get("c", 0)),
+          manifestIndex: Number(urlDataProvider.get("m", 0)),
+          sequenceIndex: Number(urlDataProvider.get("s", 0)),
+          canvasIndex: Number(urlDataProvider.get("cv", 0)),
+          rangeId: urlDataProvider.get("rid", 0),
+          rotation: Number(urlDataProvider.get("r", 0)),
+          xywh: urlDataProvider.get("xywh", ""),
+          embedded: true,
+          locales: formattedLocales
+        },
+        urlDataProvider
+      );
+      console.log(uv);
+    }
+  },
+  watch: {
+    media(val, oldVal) {
+      console.log(`new: ${val}, old: ${oldVal}`);
+      window.addEventListener("uvLoaded", this.loadUV, false);
+    }
+  },
 
-      uv = createUV('#uv', {
-        root: './uv/',
-        iiifResourceUri: urlDataProvider.get('manifest'),
-        configUri: 'uv-config.json',
-        collectionIndex: Number(urlDataProvider.get('c', 0)),
-        manifestIndex: Number(urlDataProvider.get('m', 0)),
-        sequenceIndex: Number(urlDataProvider.get('s', 0)),
-        canvasIndex: Number(urlDataProvider.get('cv', 0)),
-        rangeId: urlDataProvider.get('rid', 0),
-        rotation: Number(urlDataProvider.get('r', 0)),
-        xywh: urlDataProvider.get('xywh', ''),
-        embedded: true,
-        locales: formattedLocales
-      }, urlDataProvider);
-    }, false);
+  // TODO: integrate UV into webpack build, instead of just jury-rigging <script> tags
+  // TODO: Pass manifest && config options as parameters, instead of getting them from URL (only <App> should look at URL)
+  mounted() {
+    let jqueryScript = document.createElement("script");
+    jqueryScript.setAttribute(
+      "src",
+      "https://code.jquery.com/jquery-3.6.0.min.js"
+    );
 
-    let uvScript = document.createElement('script')
-    uvScript.setAttribute('src', '/uv/uv.js')
-    document.head.appendChild(uvScript)
+    jqueryScript.setAttribute(
+      "integrity",
+      "sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+    );
+    jqueryScript.setAttribute("crossorigin", "anonymous");
+    document.head.appendChild(jqueryScript);
+
+    let offlineScript = document.createElement("script");
+    offlineScript.setAttribute("src", "/uv/lib/offline.js");
+    document.head.appendChild(offlineScript);
+
+    let helpersSript = document.createElement("script");
+    helpersSript.setAttribute("src", "/uv/helpers.js");
+    document.head.appendChild(helpersSript);
+
+    let uvScript = document.createElement("script");
+    uvScript.setAttribute("src", "/uv/uv.js");
+    document.body.appendChild(uvScript);
+
+    // window.addEventListener("uvLoaded", this.loadUV, false);
   }
 };
 </script>

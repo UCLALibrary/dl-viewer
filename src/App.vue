@@ -11,9 +11,15 @@ export default {
     DLViewer,
   },
   computed: {
-    iiif_manifest_url: function () {
+    iiif_manifest_url() {
       const fixed_url = new URL(window.location.toString().replace("#?", "?")); // for some reason the URL format we inherited used '#?' to indicate query parameters, but URLSearchParams won't parse this.
-      return fixed_url.searchParams.get("manifest");
+      let iiif_url = fixed_url.searchParams.get("manifest");
+      let ark = iiif_url
+        .replace("https://iiif.library.ucla.edu/", "")
+        .replace("/manifest", "");
+      return `https://iiif.library.ucla.edu/${encodeURIComponent(
+        ark
+      )}/manifest`;
     },
   },
 };
