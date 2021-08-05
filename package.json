@@ -7,12 +7,15 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "copy-uv": "rimraf public/uv && cp -R node_modules/universalviewer/dist public/uv",
-    "postinstall": "npm run copy-uv"
+    "copy-mejs": "cp -R node_modules/mediaelement/build public/mejs",
+    "copy-jquery": "cp -R node_modules/jquery/dist public/jquery",
+    "postinstall": "npm run copy-uv && npm run copy-mejs && npm run copy-jquery"
   },
   "dependencies": {
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "jquery": "^3.3.1",
+    "mediaelement": "^4.2.16",
     "universalviewer": "^3.1.4",
     "vue": "^3.0.0"
   },

@@ -26,7 +26,7 @@ export default {
   },
   methods: {
     loadUV(e) {
-      console.log("in loaduv");
+      // console.log("in loaduv");
       const urlDataProvider = new UV.URLDataProvider(true);
       var formattedLocales;
       var locales = urlDataProvider.get("locales", "");
@@ -49,7 +49,7 @@ export default {
           }
         ];
       }
-      console.log("manifest url" + urlDataProvider);
+      // console.log("manifest url" + urlDataProvider);
       let uv = createUV(
         "#uv",
         {
@@ -68,12 +68,12 @@ export default {
         },
         urlDataProvider
       );
-      console.log(uv);
+      // console.log(uv);
     }
   },
   watch: {
     media(val, oldVal) {
-      console.log(`new: ${val}, old: ${oldVal}`);
+      // console.log(`new: ${val}, old: ${oldVal}`);
       window.addEventListener("uvLoaded", this.loadUV, false);
     }
   },
@@ -81,17 +81,21 @@ export default {
   // TODO: integrate UV into webpack build, instead of just jury-rigging <script> tags
   // TODO: Pass manifest && config options as parameters, instead of getting them from URL (only <App> should look at URL)
   mounted() {
-    let jqueryScript = document.createElement("script");
-    jqueryScript.setAttribute(
-      "src",
-      "https://code.jquery.com/jquery-3.6.0.min.js"
-    );
+    // let jqueryScript = document.createElement("script");
+    // jqueryScript.setAttribute(
+    //   "src",
+    //   "https://code.jquery.com/jquery-3.6.0.min.js"
+    // );
+    //
+    // jqueryScript.setAttribute(
+    //   "integrity",
+    //   "sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+    // );
+    // jqueryScript.setAttribute("crossorigin", "anonymous");
+    // document.head.appendChild(jqueryScript);
 
-    jqueryScript.setAttribute(
-      "integrity",
-      "sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
-    );
-    jqueryScript.setAttribute("crossorigin", "anonymous");
+    let jqueryScript = document.createElement("script");
+    jqueryScript.setAttribute("src", "/jquery/jquery.js");
     document.head.appendChild(jqueryScript);
 
     let offlineScript = document.createElement("script");

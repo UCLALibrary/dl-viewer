@@ -1,6 +1,6 @@
 <template>
   <div class="dl-viewer">
-    <MEJS v-if="isVideo" />
+    <MejsPlayer v-if="isVideo" :src="srcUrl" />
     <UniversalViewer
       v-else
       :iiif_manifest="iiif_manifest"
@@ -12,13 +12,13 @@
 </template>
 
 <script>
-import MEJS from "./MEJS.vue";
+import MejsPlayer from "./MejsPlayer.vue";
 import UniversalViewer from "./UniversalViewer.vue"; // TODO: set up code splitting. Might need to move this?
 import axios from "axios";
 export default {
   name: "DLViewer",
   components: {
-    MEJS,
+    MejsPlayer,
     UniversalViewer,
   },
   props: {
@@ -40,6 +40,9 @@ export default {
         default:
           return "no-download-uv-config.json"; // `${window.location.protocol}//${window.location.hostname}:${window.location.port}/`;
       }
+    },
+    srcUrl() {
+      return this.iiif_manifest.items[0].items[0].items[0].body[0].id;
     },
   },
   data() {
