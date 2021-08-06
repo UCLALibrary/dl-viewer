@@ -73,7 +73,7 @@ export default {
   },
   watch: {
     media(val, oldVal) {
-      // console.log(`new: ${val}, old: ${oldVal}`);
+      console.log(`new: ${val}, old: ${oldVal}`);
       window.addEventListener("uvLoaded", this.loadUV, false);
     }
   },
@@ -82,31 +82,40 @@ export default {
   // TODO: Pass manifest && config options as parameters, instead of getting them from URL (only <App> should look at URL)
   mounted() {
     let jqueryScript = document.createElement("script");
-    jqueryScript.setAttribute(
-      "src",
-      "https://code.jquery.com/jquery-3.6.0.min.js"
-    );
-
-    jqueryScript.setAttribute(
-      "integrity",
-      "sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
-    );
-    jqueryScript.setAttribute("crossorigin", "anonymous");
+    jqueryScript.setAttribute("src", "/jquery/jquery.js");
+    jqueryScript.setAttribute("id", "jquery");
     document.head.appendChild(jqueryScript);
 
     let offlineScript = document.createElement("script");
     offlineScript.setAttribute("src", "/uv/lib/offline.js");
+    offlineScript.setAttribute("id", "offline");
     document.head.appendChild(offlineScript);
 
     let helpersSript = document.createElement("script");
     helpersSript.setAttribute("src", "/uv/helpers.js");
+    helpersSript.setAttribute("id", "helpers");
     document.head.appendChild(helpersSript);
 
     let uvScript = document.createElement("script");
     uvScript.setAttribute("src", "/uv/uv.js");
+    uvScript.setAttribute("id", "uv");
     document.body.appendChild(uvScript);
 
     // window.addEventListener("uvLoaded", this.loadUV, false);
+  },
+
+  unmounted() {
+    const offline = document.getElementById("offline");
+    offline.parentElement.removeChild(offline);
+
+    const helpers = document.getElementById("helpers");
+    helpers.parentElement.removeChild(helpers);
+
+    const jquery = document.getElementById("jquery");
+    jquery.parentElement.removeChild(jquery);
+
+    const uv = document.getElementById("uv");
+    uv.parentElement.removeChild(uv);
   }
 };
 </script>

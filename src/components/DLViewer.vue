@@ -1,13 +1,12 @@
 <template>
   <div class="dl-viewer">
-    <MejsPlayer v-if="isVideo" :src="src" />
-    <!-- <UniversalViewer
-      v-else
+    <component
+      :is="componentType"
       :iiif_manifest="iiif_manifest"
       :iiif_manifest_url="iiif_manifest_url"
-      :media="media"
       :uv_config="parseConfig"
-    /> -->
+      :media="media"
+    />
   </div>
 </template>
 
@@ -15,13 +14,14 @@
 /* eslint-disable */
 
 import MejsPlayer from "./MejsPlayer.vue";
-// import UniversalViewer from "./UniversalViewer.vue"; // TODO: set up code splitting. Might need to move this?
+import UniversalViewer from "./UniversalViewer.vue"; // TODO: set up code splitting. Might need to move this?
 import axios from "axios";
+
 export default {
   name: "DLViewer",
   components: {
-    MejsPlayer
-    // UniversalViewer
+    MejsPlayer,
+    UniversalViewer
   },
   props: {
     iiif_manifest_url: {
@@ -30,6 +30,15 @@ export default {
     }
   },
   computed: {
+    componentType() {
+      let output = "UniversalViewer";
+      if (this.isVideo) {
+        output = "MejsPlayer";
+      } else {
+        this.src = "";
+      }
+      return output;
+    },
     isVideo() {
       return this.media == "Video";
     },
@@ -62,20 +71,22 @@ export default {
         output = true;
       }
 
-      if (output === true) {
-        this.src = this.iiif_manifest.items[0].items[0].items[0].body[1].id;
-      } else {
-        this.src = this.iiif_manifest.items[0].items[0].items[0].body[0].id;
-      }
       console.log("src  from wowza" + this.src);
       switch (this.iiif_manifest["@context"]) {
         case "http://iiif.io/api/presentation/3/context.json":
           this.media =
             this.iiif_manifest.items[0].items[0].items[0].body[0].type;
+          if (output === true) {
+            this.src = this.iiif_manifest.items[0].items[0].items[0].body[1].id;
+          } else {
+            this.src = this.iiif_manifest.items[0].items[0].items[0].body[0].id;
+          }
           break;
         default:
           this.media = "Image";
+          this.src = "";
       }
+      console.log("Media" + this.media);
     } catch (error) {
       console.log(error.response);
     }
