@@ -1,31 +1,33 @@
 <template>
   <div class="dl-viewer">
-    <MEJS v-if="isVideo" />
-    <UniversalViewer
+    <MejsPlayer v-if="isVideo" :src="src" />
+    <!-- <UniversalViewer
       v-else
       :iiif_manifest="iiif_manifest"
       :iiif_manifest_url="iiif_manifest_url"
       :media="media"
       :uv_config="parseConfig"
-    />
+    /> -->
   </div>
 </template>
 
 <script>
-import MEJS from "./MEJS.vue";
-import UniversalViewer from "./UniversalViewer.vue"; // TODO: set up code splitting. Might need to move this?
+/* eslint-disable */
+
+import MejsPlayer from "./MejsPlayer.vue";
+// import UniversalViewer from "./UniversalViewer.vue"; // TODO: set up code splitting. Might need to move this?
 import axios from "axios";
 export default {
   name: "DLViewer",
   components: {
-    MEJS,
-    UniversalViewer,
+    MejsPlayer
+    // UniversalViewer
   },
   props: {
     iiif_manifest_url: {
       type: String,
-      required: true,
-    },
+      required: true
+    }
   },
   computed: {
     isVideo() {
@@ -40,18 +42,32 @@ export default {
         default:
           return "no-download-uv-config.json"; // `${window.location.protocol}//${window.location.hostname}:${window.location.port}/`;
       }
-    },
+    }
   },
   data() {
-    return { iiif_manifest: {}, media: "" };
+    return { iiif_manifest: {}, media: "", src: "" };
   },
   async beforeCreate() {
     try {
-      console.log("encode" + encodeURIComponent(this.iiif_manifest_url));
+      // console.log("encode" + encodeURIComponent(this.iiif_manifest_url));
 
       const response = await axios.get(this.iiif_manifest_url);
-      console.log(response.data);
+      // console.log(response.data);
       this.iiif_manifest = response.data;
+      let output = false;
+      let isSafari = !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/);
+      let iOS =
+        /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+      if (isSafari || iOS) {
+        output = true;
+      }
+
+      if (output === true) {
+        this.src = this.iiif_manifest.items[0].items[0].items[0].body[1].id;
+      } else {
+        this.src = this.iiif_manifest.items[0].items[0].items[0].body[0].id;
+      }
+      console.log("src  from wowza" + this.src);
       switch (this.iiif_manifest["@context"]) {
         case "http://iiif.io/api/presentation/3/context.json":
           this.media =
@@ -61,9 +77,9 @@ export default {
           this.media = "Image";
       }
     } catch (error) {
-      console.log(error.response.data);
+      console.log(error.response);
     }
-  },
+  }
 };
 </script>
 

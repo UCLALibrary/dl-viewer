@@ -26,7 +26,7 @@ export default {
   },
   methods: {
     loadUV(e) {
-      console.log("in loaduv");
+      // console.log("in loaduv");
       const urlDataProvider = new UV.URLDataProvider(true);
       var formattedLocales;
       var locales = urlDataProvider.get("locales", "");
@@ -49,7 +49,7 @@ export default {
           }
         ];
       }
-      console.log("manifest url" + urlDataProvider);
+      // console.log("manifest url" + urlDataProvider);
       let uv = createUV(
         "#uv",
         {
@@ -68,12 +68,12 @@ export default {
         },
         urlDataProvider
       );
-      console.log(uv);
+      // console.log(uv);
     }
   },
   watch: {
     media(val, oldVal) {
-      console.log(`new: ${val}, old: ${oldVal}`);
+      // console.log(`new: ${val}, old: ${oldVal}`);
       window.addEventListener("uvLoaded", this.loadUV, false);
     }
   },
