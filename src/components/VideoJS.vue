@@ -23,10 +23,6 @@ export default {
         return {};
       },
     },
-    src: {
-      type: String,
-      default: "",
-    },
   },
   data() {
     return {

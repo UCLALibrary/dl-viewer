@@ -67,8 +67,6 @@ export default {
         controls: true,
         sources: [
           {
-            // src: "https://wowza.library.ucla.edu/iiif_av_public/definst/mp4:synanon/pairtree_root/21/19/8=/zz/00/2h/ds/j2/21198=zz002hdsj2/ark%2B=21198=zz002hdsj2.mp4/manifest.mpd",
-            // type: "application/dash+xml"
             src: this.setSrc,
             type: this.setType
           }
@@ -88,20 +86,7 @@ export default {
   data() {
     return {
       iiif_manifest: {},
-      media: "",
-      src: ""
-      // videoOptions: {
-      //   // autoplay: true,
-      //   controls: true,
-      //   sources: [
-      //     {
-      //       // src: "https://wowza.library.ucla.edu/iiif_av_public/definst/mp4:synanon/pairtree_root/21/19/8=/zz/00/2h/ds/j2/21198=zz002hdsj2/ark%2B=21198=zz002hdsj2.mp4/manifest.mpd",
-      //       // type: "application/dash+xml"
-      //       src: "https://wowza.library.ucla.edu/iiif_av_public/definst/mp4:synanon/pairtree_root/21/19/8=/zz/00/2h/ds/j2/21198=zz002hdsj2/ark%2B=21198=zz002hdsj2.mp4/playlist.m3u8",
-      //       type: "application/vnd.apple.mpegurl"
-      //     }
-      //   ]
-      // }
+      media: ""
     };
   },
   async beforeCreate() {
