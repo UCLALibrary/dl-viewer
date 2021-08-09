@@ -1,10 +1,10 @@
 <template>
-  <div :class="classes">
+  <div class="mejs">
     <div id="media-viewer-container">
       <div class="players" id="player1-container">
         <div class="media-wrapper">
           <video
-            :src="src"
+            src="https://wowza.library.ucla.edu/iiif_av_public/definst/mp4:synanon/pairtree_root/21/19/8=/zz/00/2h/ds/j2/21198=zz002hdsj2/ark%2B=21198=zz002hdsj2.mp4/manifest.mpd"
             class="mejs__player"
             poster="https://static.library.ucla.edu/video_icon.svg"
             data-mejsoptions='{"alwaysShowControls": "true"}'
@@ -25,14 +25,11 @@ export default {
       default: ""
     }
   },
-  computed: {
-    classes() {
-      return ["mejs", { "show-player": this.src }];
-    }
-  },
-  beforeMount() {
+
+  mounted() {
     let mejsScript = document.createElement("script");
     mejsScript.setAttribute("src", "/mejs/mediaelement-and-player.js");
+    mejsScript.setAttribute("id", "mejs");
     document.head.appendChild(mejsScript);
 
     // let jqueryScript = document.createElement("script");
@@ -50,6 +47,7 @@ export default {
 
     let jqueryScript = document.createElement("script");
     jqueryScript.setAttribute("src", "/jquery/jquery.js");
+    jqueryScript.setAttribute("id", "jquery");
     document.head.appendChild(jqueryScript);
     // document.getElementsByClassName("media-wrapper").innerHtml
     // document.onreadystatechange = () => {
@@ -58,6 +56,13 @@ export default {
     //     // fetch to next page or some code
     //   }
     // };
+  },
+  unmounted() {
+    const mejs = document.getElementById("mejs");
+    mejs.parentElement.removeChild(mejs);
+
+    const jquery = document.getElementById("jquery");
+    jquery.parentElement.removeChild(jquery);
   }
 };
 </script>
