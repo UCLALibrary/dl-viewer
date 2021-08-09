@@ -101,7 +101,7 @@ export default {
     uvScript.setAttribute("id", "uv");
     document.body.appendChild(uvScript);
 
-    // window.addEventListener("uvLoaded", this.loadUV, false);
+    window.addEventListener("uvLoaded", this.loadUV, false);
   },
 
   unmounted() {
