@@ -16,7 +16,9 @@
 
 import VideoJS from "./VideoJS.vue";
 import UniversalViewer from "./UniversalViewer.vue"; // TODO: set up code splitting. Might need to move this?
+
 import axios from "axios";
+
 export default {
   name: "DLViewer",
   components: {
@@ -33,7 +35,46 @@ export default {
     isVideo() {
       return this.media == "Video";
     },
-
+    isSafariIOS() {
+      let output = false;
+      let isSafari = !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/);
+      let iOS =
+        /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+      if (isSafari || iOS) {
+        output = true;
+      }
+      return output;
+    },
+    setSrc() {
+      //TODO also check format before just setting the src
+      if (this.isSafariIOS === true) {
+        return this.iiif_manifest.items[0].items[0].items[0].body[1].id;
+      } else {
+        return this.iiif_manifest.items[0].items[0].items[0].body[0].id;
+      }
+    },
+    setType() {
+      //TODO also check format before just setting the src
+      if (this.isSafariIOS === true) {
+        return this.iiif_manifest.items[0].items[0].items[0].body[1].format;
+      } else {
+        return this.iiif_manifest.items[0].items[0].items[0].body[0].format;
+      }
+    },
+    videoOptions() {
+      return {
+        // autoplay: true,
+        controls: true,
+        sources: [
+          {
+            // src: "https://wowza.library.ucla.edu/iiif_av_public/definst/mp4:synanon/pairtree_root/21/19/8=/zz/00/2h/ds/j2/21198=zz002hdsj2/ark%2B=21198=zz002hdsj2.mp4/manifest.mpd",
+            // type: "application/dash+xml"
+            src: this.setSrc,
+            type: this.setType
+          }
+        ]
+      };
+    },
     parseConfig() {
       switch (this.media) {
         case "Image":
@@ -48,17 +89,19 @@ export default {
     return {
       iiif_manifest: {},
       media: "",
-      src: "",
-      videoOptions: {
-        // autoplay: true,
-        controls: true,
-        sources: [
-          {
-            src: "https://wowza.library.ucla.edu/iiif_av_public/definst/mp4:synanon/pairtree_root/21/19/8=/zz/00/2h/ds/j2/21198=zz002hdsj2/ark%2B=21198=zz002hdsj2.mp4/manifest.mpd",
-            type: "application/dash+xml"
-          }
-        ]
-      }
+      src: ""
+      // videoOptions: {
+      //   // autoplay: true,
+      //   controls: true,
+      //   sources: [
+      //     {
+      //       // src: "https://wowza.library.ucla.edu/iiif_av_public/definst/mp4:synanon/pairtree_root/21/19/8=/zz/00/2h/ds/j2/21198=zz002hdsj2/ark%2B=21198=zz002hdsj2.mp4/manifest.mpd",
+      //       // type: "application/dash+xml"
+      //       src: "https://wowza.library.ucla.edu/iiif_av_public/definst/mp4:synanon/pairtree_root/21/19/8=/zz/00/2h/ds/j2/21198=zz002hdsj2/ark%2B=21198=zz002hdsj2.mp4/playlist.m3u8",
+      //       type: "application/vnd.apple.mpegurl"
+      //     }
+      //   ]
+      // }
     };
   },
   async beforeCreate() {
@@ -68,20 +111,8 @@ export default {
       const response = await axios.get(this.iiif_manifest_url);
       // console.log(response.data);
       this.iiif_manifest = response.data;
-      let output = false;
-      let isSafari = !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/);
-      let iOS =
-        /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-      if (isSafari || iOS) {
-        output = true;
-      }
 
-      if (output === true) {
-        this.src = this.iiif_manifest.items[0].items[0].items[0].body[1].id;
-      } else {
-        this.src = this.iiif_manifest.items[0].items[0].items[0].body[0].id;
-      }
-      console.log("src  from wowza" + this.src);
+      // Media format for viewer
       switch (this.iiif_manifest["@context"]) {
         case "http://iiif.io/api/presentation/3/context.json":
           this.media =

@@ -4,6 +4,8 @@
       ref="videoPlayer"
       class="video-js"
       poster="https://static.library.ucla.edu/video_icon.svg"
+      :src="src"
+      :type="type"
     ></video>
   </div>
 </template>
@@ -39,6 +41,11 @@ export default {
         // console.log('onPlayerReady', this)
       }
     );
+  },
+  beforeUnmount() {
+    if (this.player) {
+      this.player.dispose();
+    }
   },
 };
 </script>
