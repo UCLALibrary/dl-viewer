@@ -73,7 +73,7 @@ export default {
   },
   watch: {
     media(val, oldVal) {
-      console.log(`new: ${val}, old: ${oldVal}`);
+      // console.log(`new: ${val}, old: ${oldVal}`);
       window.addEventListener("uvLoaded", this.loadUV, false);
     }
   },
