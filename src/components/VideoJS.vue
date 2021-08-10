@@ -47,7 +47,12 @@ export default {
 </script>
 
 <style>
-/* .video-js-container {
-  object-fit: contain;
-} */
+.video-js-container {
+  width: 100%;
+  height: 100%;
+}
+.video-player {
+  width: 100%;
+  height: 100%;
+}
 </style>

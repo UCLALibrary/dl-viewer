@@ -90,9 +90,8 @@ export default {
       return {
         autoplay: false,
         controls: true,
-        fluid: true,
         fill: true,
-        responsive: true,
+        // fluid: true,
         sources: [
           {
             src: this.setSrc,
