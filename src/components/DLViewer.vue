@@ -88,7 +88,7 @@ export default {
     },
     videoOptions() {
       return {
-        // autoplay: true,
+        autoplay: false,
         controls: true,
         fluid: true,
         fill: true,
