@@ -45,21 +45,46 @@ export default {
       }
       return output;
     },
-    setSrc() {
-      //TODO also check format before just setting the src
-      if (this.isSafariIOS === true) {
+    setHLS() {
+      if (
+        this.iiif_manifest.items[0].items[0].items[0].body[1].format ===
+        "application/vnd.apple.mpegurl"
+      ) {
         return this.iiif_manifest.items[0].items[0].items[0].body[1].id;
-      } else {
+      } else if (
+        this.iiif_manifest.items[0].items[0].items[0].body[0].format ===
+        "application/vnd.apple.mpegurl"
+      ) {
         return this.iiif_manifest.items[0].items[0].items[0].body[0].id;
       }
     },
+    setDash() {
+      if (
+        this.iiif_manifest.items[0].items[0].items[0].body[1].format ===
+        "application/dash+xml"
+      ) {
+        return this.iiif_manifest.items[0].items[0].items[0].body[1].id;
+      } else if (
+        this.iiif_manifest.items[0].items[0].items[0].body[0].format ===
+        "application/dash+xml"
+      ) {
+        return this.iiif_manifest.items[0].items[0].items[0].body[0].id;
+      }
+    },
+    setSrc() {
+      let output = this.setDash;
+      if (this.isSafariIOS === true) {
+        output = this.setHLS;
+      }
+      return output;
+    },
     setType() {
       //TODO also check format before just setting the src
+      let output = "application/dash+xml";
       if (this.isSafariIOS === true) {
-        return this.iiif_manifest.items[0].items[0].items[0].body[1].format;
-      } else {
-        return this.iiif_manifest.items[0].items[0].items[0].body[0].format;
+        output = "application/vnd.apple.mpegurl";
       }
+      return output;
     },
     videoOptions() {
       return {
