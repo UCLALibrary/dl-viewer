@@ -1,10 +1,12 @@
 <template>
-  <div class="video-player">
-    <video
-      ref="videoPlayer"
-      class="video-js"
-      poster="https://static.library.ucla.edu/video_icon.svg"
-    ></video>
+  <div class="video-js-container">
+    <div class="video-player">
+      <video
+        ref="videoPlayer"
+        class="video-js"
+        poster="https://static.library.ucla.edu/video_icon.svg"
+      ></video>
+    </div>
   </div>
 </template>
 
@@ -44,4 +46,10 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+/* doesn't do anything */
+.video-js-container {
+  width: 100%;
+  height: 100%;
+}
+</style>

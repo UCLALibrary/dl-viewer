@@ -90,6 +90,8 @@ export default {
       return {
         // autoplay: true,
         controls: true,
+        fluid: true,
+        fill: true,
         sources: [
           {
             src: this.setSrc,
