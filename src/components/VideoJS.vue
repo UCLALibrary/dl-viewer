@@ -3,7 +3,7 @@
     <div class="video-player">
       <video
         ref="videoPlayer"
-        class="video-js"
+        class="video-js vjs-big-play-centered"
         poster="https://static.library.ucla.edu/video_icon.svg"
       ></video>
     </div>
@@ -47,8 +47,8 @@ export default {
 </script>
 
 <style>
-/* .video-js-container {
-  width: 100%;
-  height: 100%;
-} */
+.video-js-container {
+  width: 80%;
+  height: 660px;
+}
 </style>
