@@ -47,7 +47,6 @@ export default {
 </script>
 
 <style>
-/* doesn't do anything */
 .video-js-container {
   width: 100%;
   height: 100%;
