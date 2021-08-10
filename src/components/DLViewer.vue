@@ -92,6 +92,7 @@ export default {
         controls: true,
         fluid: true,
         fill: true,
+        responsive: true,
         sources: [
           {
             src: this.setSrc,
