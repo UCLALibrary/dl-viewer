@@ -48,7 +48,7 @@ export default {
 
 <style>
 .video-js-container {
-  width: 80%;
-  height: 660px;
+  width: 100%;
+  height: 550px;
 }
 </style>
