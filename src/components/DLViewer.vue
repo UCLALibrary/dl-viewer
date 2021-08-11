@@ -5,7 +5,7 @@
       v-else
       :iiif_manifest="iiif_manifest"
       :iiif_manifest_url="iiif_manifest_url"
-      :uv_config="parseConfig"
+      :uv_config="uv_config"
       :media="media"
     />
   </div>
@@ -55,21 +55,13 @@ export default {
         };
       }
       return {};
-    },
-    parseConfig() {
-      switch (this.media) {
-        case "Image":
-          return "uv-config.json"; // `${window.location.protocol}//${window.location.hostname}:${window.location.port}/uv-config.json`;
-
-        default:
-          return "no-download-uv-config.json"; // `${window.location.protocol}//${window.location.hostname}:${window.location.port}/`;
-      }
     }
   },
   data() {
     return {
       iiif_manifest: {},
-      media: ""
+      media: "",
+      uv_config: ""
     };
   },
   async beforeCreate() {
@@ -84,10 +76,11 @@ export default {
         case "http://iiif.io/api/presentation/3/context.json":
           this.media =
             this.iiif_manifest.items[0].items[0].items[0].body[0].type;
-
+          this.uv_config = "no-download-uv-config.json";
           break;
         default:
           this.media = "Image";
+          this.uv_config = "uv-config.json";
       }
       console.log("Media" + this.media);
     } catch (error) {

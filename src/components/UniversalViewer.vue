@@ -49,7 +49,7 @@ export default {
           }
         ];
       }
-      // console.log("manifest url" + urlDataProvider);
+      console.log("this.uv_config " + this.uv_config);
       let uv = createUV(
         "#uv",
         {
@@ -73,18 +73,22 @@ export default {
   },
   watch: {
     media(val, oldVal) {
-      // console.log(`new: ${val}, old: ${oldVal}`);
+      console.log(`new: ${val}, old: ${oldVal}`);
       // window.addEventListener("uvLoaded", this.loadUV, false);
+    },
+    uv_config(val, oldVal) {
+      console.log(`uv new: ${val}, old: ${oldVal}`);
+      window.addEventListener("uvLoaded", this.loadUV, false);
     }
   },
 
   // TODO: integrate UV into webpack build, instead of just jury-rigging <script> tags
   // TODO: Pass manifest && config options as parameters, instead of getting them from URL (only <App> should look at URL)
   mounted() {
-    let jqueryScript = document.createElement("script");
+    /* let jqueryScript = document.createElement("script");
     jqueryScript.setAttribute("src", "/jquery/jquery.js");
     jqueryScript.setAttribute("id", "jquery");
-    document.head.appendChild(jqueryScript);
+    document.head.appendChild(jqueryScript);*/
 
     let offlineScript = document.createElement("script");
     offlineScript.setAttribute("src", "/uv/lib/offline.js");
@@ -101,7 +105,7 @@ export default {
     uvScript.setAttribute("id", "uv");
     document.body.appendChild(uvScript);
 
-    window.addEventListener("uvLoaded", this.loadUV, false);
+    // window.addEventListener("uvLoaded", this.loadUV, false);
   },
 
   unmounted() {
@@ -111,8 +115,8 @@ export default {
     const helpers = document.getElementById("helpers");
     helpers.parentElement.removeChild(helpers);
 
-    const jquery = document.getElementById("jquery");
-    jquery.parentElement.removeChild(jquery);
+    /*const jquery = document.getElementById("jquery");
+    jquery.parentElement.removeChild(jquery);*/
 
     const uv = document.getElementById("uv");
     uv.parentElement.removeChild(uv);
