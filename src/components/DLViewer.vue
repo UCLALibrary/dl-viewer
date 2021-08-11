@@ -6,6 +6,7 @@
       :iiif_manifest="iiif_manifest"
       :iiif_manifest_url="iiif_manifest_url"
       :uv_config="parseConfig"
+      :media="media"
     />
   </div>
 </template>
