@@ -36,22 +36,25 @@ export default {
       return this.media == "Video";
     },
     videoOptions() {
-      return {
-        autoplay: false,
-        controls: true,
-        fill: true,
-        // fluid: true,
-        sources: [
-          {
-            src: this.iiif_manifest.items[0].items[0].items[0].body[0].id,
-            type: this.iiif_manifest.items[0].items[0].items[0].body[0].format
-          },
-          {
-            src: this.iiif_manifest.items[0].items[0].items[0].body[1].id,
-            type: this.iiif_manifest.items[0].items[0].items[0].body[1].format
-          }
-        ]
-      };
+      if (this.media == "Video") {
+        return {
+          autoplay: false,
+          controls: true,
+          fill: true,
+          // fluid: true,
+          sources: [
+            {
+              src: this.iiif_manifest.items[0].items[0].items[0].body[0].id,
+              type: this.iiif_manifest.items[0].items[0].items[0].body[0].format
+            },
+            {
+              src: this.iiif_manifest.items[0].items[0].items[0].body[1].id,
+              type: this.iiif_manifest.items[0].items[0].items[0].body[1].format
+            }
+          ]
+        };
+      }
+      return {};
     },
     parseConfig() {
       switch (this.media) {
@@ -81,18 +84,12 @@ export default {
         case "http://iiif.io/api/presentation/3/context.json":
           this.media =
             this.iiif_manifest.items[0].items[0].items[0].body[0].type;
-          this.src =
-            checkUserAgent === true
-              ? this.iiif_manifest.items[0].items[0].items[0].body[1].id
-              : this.iiif_manifest.items[0].items[0].items[0].body[0].id;
 
           break;
         default:
           this.media = "Image";
-          this.src = "";
       }
       console.log("Media" + this.media);
-      console.log("Src" + this.src);
     } catch (error) {
       console.log(error.response);
     }
