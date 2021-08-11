@@ -1,6 +1,6 @@
 <template>
   <div class="dl-viewer">
-    <MejsPlayer v-if="isVideo" :src="src" />
+    <VideoJS v-if="isVideo" :options="videoOptions" />
     <UniversalViewer
       v-else
       :iiif_manifest="iiif_manifest"
@@ -14,15 +14,15 @@
 <script>
 /* eslint-disable */
 
-import MejsPlayer from "./MejsPlayer.vue";
+import VideoJS from "./VideoJS.vue";
 import UniversalViewer from "./UniversalViewer.vue"; // TODO: set up code splitting. Might need to move this?
+
 import axios from "axios";
-import checkUserAgent from "../utils/checkUserAgent";
 
 export default {
   name: "DLViewer",
   components: {
-    MejsPlayer,
+    VideoJS,
     UniversalViewer
   },
   props: {
@@ -35,7 +35,24 @@ export default {
     isVideo() {
       return this.media == "Video";
     },
-
+    videoOptions() {
+      return {
+        autoplay: false,
+        controls: true,
+        fill: true,
+        // fluid: true,
+        sources: [
+          {
+            src: this.iiif_manifest.items[0].items[0].items[0].body[0].id,
+            type: this.iiif_manifest.items[0].items[0].items[0].body[0].format
+          },
+          {
+            src: this.iiif_manifest.items[0].items[0].items[0].body[1].id,
+            type: this.iiif_manifest.items[0].items[0].items[0].body[1].format
+          }
+        ]
+      };
+    },
     parseConfig() {
       switch (this.media) {
         case "Image":
@@ -47,16 +64,19 @@ export default {
     }
   },
   data() {
-    return { iiif_manifest: {}, media: "", src: "" };
+    return {
+      iiif_manifest: {},
+      media: ""
+    };
   },
   async beforeCreate() {
     try {
       // console.log("encode" + encodeURIComponent(this.iiif_manifest_url));
-
       const response = await axios.get(this.iiif_manifest_url);
       // console.log(response.data);
       this.iiif_manifest = response.data;
 
+      // Media format for viewer
       switch (this.iiif_manifest["@context"]) {
         case "http://iiif.io/api/presentation/3/context.json":
           this.media =
