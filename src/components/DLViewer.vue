@@ -35,57 +35,6 @@ export default {
     isVideo() {
       return this.media == "Video";
     },
-    isSafariIOS() {
-      let output = false;
-      let isSafari = !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/);
-      let iOS =
-        /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-      if (isSafari || iOS) {
-        output = true;
-      }
-      return output;
-    },
-    setHLS() {
-      if (
-        this.iiif_manifest.items[0].items[0].items[0].body[1].format ===
-        "application/vnd.apple.mpegurl"
-      ) {
-        return this.iiif_manifest.items[0].items[0].items[0].body[1].id;
-      } else if (
-        this.iiif_manifest.items[0].items[0].items[0].body[0].format ===
-        "application/vnd.apple.mpegurl"
-      ) {
-        return this.iiif_manifest.items[0].items[0].items[0].body[0].id;
-      }
-    },
-    setDash() {
-      if (
-        this.iiif_manifest.items[0].items[0].items[0].body[1].format ===
-        "application/dash+xml"
-      ) {
-        return this.iiif_manifest.items[0].items[0].items[0].body[1].id;
-      } else if (
-        this.iiif_manifest.items[0].items[0].items[0].body[0].format ===
-        "application/dash+xml"
-      ) {
-        return this.iiif_manifest.items[0].items[0].items[0].body[0].id;
-      }
-    },
-    setSrc() {
-      let output = this.setDash;
-      if (this.isSafariIOS === true) {
-        output = this.setHLS;
-      }
-      return output;
-    },
-    setType() {
-      //TODO also check format before just setting the src
-      let output = "application/dash+xml";
-      if (this.isSafariIOS === true) {
-        output = "application/vnd.apple.mpegurl";
-      }
-      return output;
-    },
     videoOptions() {
       return {
         autoplay: false,
@@ -94,8 +43,12 @@ export default {
         // fluid: true,
         sources: [
           {
-            src: this.setSrc,
-            type: this.setType
+            src: this.iiif_manifest.items[0].items[0].items[0].body[0].id,
+            type: this.iiif_manifest.items[0].items[0].items[0].body[0].format
+          },
+          {
+            src: this.iiif_manifest.items[0].items[0].items[0].body[1].id,
+            type: this.iiif_manifest.items[0].items[0].items[0].body[1].format
           }
         ]
       };
