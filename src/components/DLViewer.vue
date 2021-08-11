@@ -5,7 +5,6 @@
       v-else
       :iiif_manifest="iiif_manifest"
       :iiif_manifest_url="iiif_manifest_url"
-      :media="media"
       :uv_config="parseConfig"
     />
   </div>
@@ -81,10 +80,18 @@ export default {
         case "http://iiif.io/api/presentation/3/context.json":
           this.media =
             this.iiif_manifest.items[0].items[0].items[0].body[0].type;
+          this.src =
+            checkUserAgent === true
+              ? this.iiif_manifest.items[0].items[0].items[0].body[1].id
+              : this.iiif_manifest.items[0].items[0].items[0].body[0].id;
+
           break;
         default:
           this.media = "Image";
+          this.src = "";
       }
+      console.log("Media" + this.media);
+      console.log("Src" + this.src);
     } catch (error) {
       console.log(error.response);
     }
