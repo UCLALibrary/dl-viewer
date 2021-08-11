@@ -1,0 +1,36 @@
+{
+    "options": {
+        "rightPanelEnabled": false
+    },
+    "modules": {
+      "headerPanel": {
+        "options": {
+          "settingsButtonEnabled": true
+        }
+      },
+      "footerPanel": {
+          "options": 
+          {
+            "downloadEnabled": true,
+            "moreInfoEnabled": false,
+            "printEnabled": false,
+            "shareEnabled": false
+          },
+          "content": {
+            "download": "Download ",
+            "exitFullScreen": "Exit Full Screen",
+            "fullScreen": "Full Screen"
+            }
+      },
+      "downloadDialogue": {
+        "options": {
+          "confinedImageSize": 200,
+          "currentViewDisabledPercentage": 90,
+          "maxImageWidth": 5000,
+          "optionsExplanatoryTextEnabled": true,
+          "selectionEnabled": false
+        }
+      }
+    }
+  }
+  
