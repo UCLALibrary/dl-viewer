@@ -1,15 +1,24 @@
-# UCLA Library DLViewer
+# dl-viewer
 
-UCLA Digital Library media viewer.
-
-Currently, this project is simply a deployment of Universal Viewer (http://universalviewer.io/) with local configuration. Future versions might change the underlying viewer, however, or include a shim app that loads different viewers for different media types.
-
-# Build
-
-First, [npm]() must be installed. Then:
-
+## Project setup
 ```
-sh ./build.sh
+npm install
 ```
 
-This gathers the code into the `./dist/` directory, which can then be copied to the web server.
+### Compiles and hot-reloads for development
+```
+npm run serve
+```
+
+### Compiles and minifies for production
+```
+npm run build
+```
+
+### Lints and fixes files
+```
+npm run lint
+```
+
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).
