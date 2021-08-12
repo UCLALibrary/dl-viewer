@@ -7,26 +7,14 @@
 
 export default {
   props: {
-    iiif_manifest: {
+    options: {
       type: Object,
-      required: true
-    },
-    media: {
-      type: String,
-      required: true
-    },
-    iiif_manifest_url: {
-      type: String,
-      required: true
-    },
-    uv_config: {
-      type: String,
       required: true
     }
   },
   methods: {
     loadUV(e) {
-      // console.log("in loaduv");
+      console.log("in loaduv");
       const urlDataProvider = new UV.URLDataProvider(true);
       var formattedLocales;
       var locales = urlDataProvider.get("locales", "");
@@ -49,13 +37,13 @@ export default {
           }
         ];
       }
-      console.log("this.uv_config " + this.uv_config);
+
       let uv = createUV(
         "#uv",
         {
           root: "./uv/",
-          iiifResourceUri: this.iiif_manifest_url,
-          configUri: this.uv_config,
+          iiifResourceUri: this.options["iiif_manifest_url"],
+          configUri: this.options.uv_config,
           collectionIndex: Number(urlDataProvider.get("c", 0)),
           manifestIndex: Number(urlDataProvider.get("m", 0)),
           sequenceIndex: Number(urlDataProvider.get("s", 0)),
@@ -71,20 +59,11 @@ export default {
       // console.log(uv);
     }
   },
-  watch: {
-    media(val, oldVal) {
-      console.log(`new: ${val}, old: ${oldVal}`);
-      // window.addEventListener("uvLoaded", this.loadUV, false);
-    },
-    uv_config(val, oldVal) {
-      console.log(`uv new: ${val}, old: ${oldVal}`);
-      window.addEventListener("uvLoaded", this.loadUV, false);
-    }
-  },
 
   // TODO: integrate UV into webpack build, instead of just jury-rigging <script> tags
   // TODO: Pass manifest && config options as parameters, instead of getting them from URL (only <App> should look at URL)
   mounted() {
+    console.log("In mounted");
     /* let jqueryScript = document.createElement("script");
     jqueryScript.setAttribute("src", "/jquery/jquery.js");
     jqueryScript.setAttribute("id", "jquery");
@@ -105,7 +84,7 @@ export default {
     uvScript.setAttribute("id", "uv");
     document.body.appendChild(uvScript);
 
-    // window.addEventListener("uvLoaded", this.loadUV, false);
+    window.addEventListener("uvLoaded", this.loadUV, false);
   },
 
   unmounted() {
