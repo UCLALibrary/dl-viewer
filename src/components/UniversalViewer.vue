@@ -12,9 +12,19 @@ export default {
       required: true
     }
   },
+  watch: {
+    options: {
+      handler: function (newVal, oldVal) {
+        console.log("The uv has changed!");
+        //solution for safari
+        window.addEventListener("uvLoaded", this.loadUV, false);
+      },
+      immediate: true
+    }
+  },
   methods: {
     loadUV(e) {
-      console.log("in loaduv");
+      console.log("in loaduv test");
       const urlDataProvider = new UV.URLDataProvider(true);
       var formattedLocales;
       var locales = urlDataProvider.get("locales", "");
