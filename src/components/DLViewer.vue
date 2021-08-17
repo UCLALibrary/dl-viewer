@@ -7,9 +7,6 @@
 <script>
 /* eslint-disable */
 
-// import VideoJS from "./VideoJS.vue";
-// import UniversalViewer from "./UniversalViewer.vue"; // TODO: set up code splitting. Might need to move this?
-
 import axios from "axios";
 import { defineAsyncComponent } from "vue";
 
@@ -39,22 +36,29 @@ export default {
     try {
       // console.log("encode" + encodeURIComponent(this.iiif_manifest_url));
       const response = await axios.get(this.iiif_manifest_url);
-      // console.log(response.data);
+      console.log(response.data);
       this.iiif_manifest = response.data;
       this.uv_config = "";
       this.options = {};
+
       // Media format for viewer
+      //Check both formats of iiif manifests for type
       switch (this.iiif_manifest["@context"]) {
         case "http://iiif.io/api/presentation/3/context.json":
-          this.media =
-            this.iiif_manifest.items[0].items[0].items[0].body[0].type;
+          if (this.iiif_manifest.items[0].items[0].items[0].body["type"]) {
+            this.media =
+              this.iiif_manifest.items[0].items[0].items[0].body["type"];
+          } else {
+            this.media =
+              this.iiif_manifest.items[0].items[0].items[0].body[0].type;
+          }
+          console.log(this.media);
           this.uv_config = "no-download-uv-config.json";
-          if (this.media == "Video") {
+          if (this.media == "Video" || this.media == "Choice") {
             const videoOptions = {
               autoplay: false,
               controls: true,
               fill: true,
-              // fluid: true,
               sources: []
             };
             videoOptions.sources = [
@@ -68,8 +72,26 @@ export default {
                 type: this.iiif_manifest.items[0].items[0].items[0].body[1]
                   .format
               }
+              // For choice format iiif manifests
+              // {
+              //   src: this.iiif_manifest.items[1].items[0].items[0].body[
+              //     "items"
+              //   ][0]["id"],
+              //   type: this.iiif_manifest.items[1].items[0].items[0].body[
+              //     "items"
+              //   ][0]["format"]
+              // },
+              // {
+              //   src: this.iiif_manifest.items[0].items[0].items[0].body[
+              //     "items"
+              //   ][1]["id"],
+              //   type: this.iiif_manifest.items[0].items[0].items[0].body[
+              //     "items"
+              //   ][1]["format"]
+              // }
             ];
             this.options = videoOptions;
+            console.log(this.options);
           } else {
             this.options = {
               iiif_manifest: this.iiif_manifest,
@@ -91,8 +113,11 @@ export default {
           };
       }
 
-      this.viewer = this.media == "Video" ? "VideoJS" : "UniversalViewer";
-      console.log("Media" + this.media);
+      this.viewer =
+        this.media == "Video" || this.media == "Choice"
+          ? "VideoJS"
+          : "UniversalViewer";
+      // console.log("Media" + this.media);
     } catch (error) {
       console.log(error.response);
     }
