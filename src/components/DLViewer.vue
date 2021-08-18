@@ -36,7 +36,7 @@ export default {
     try {
       // console.log("encode" + encodeURIComponent(this.iiif_manifest_url));
       const response = await axios.get(this.iiif_manifest_url);
-      console.log(response.data);
+      // console.log(response.data);
       this.iiif_manifest = response.data;
       this.uv_config = "";
       this.options = {};
@@ -113,6 +113,7 @@ export default {
               }
             ];
             this.options = videoOptions;
+            this.media = "Video";
           } else {
             this.options = {
               iiif_manifest: this.iiif_manifest,
@@ -133,10 +134,7 @@ export default {
           };
       }
 
-      this.viewer =
-        this.media == "Video" || this.media == "Choice"
-          ? "VideoJS"
-          : "UniversalViewer";
+      this.viewer = this.media == "Video" ? "VideoJS" : "UniversalViewer";
       // console.log("Media" + this.media);
     } catch (error) {
       console.log(error.response);
