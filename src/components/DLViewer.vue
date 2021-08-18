@@ -53,8 +53,19 @@ export default {
               this.iiif_manifest.items[0].items[0].items[0].body[0].type;
           }
           console.log(this.media);
+          //If media is choice, also check the nested type to see if sound. if so, reset media to sound
+          if (
+            this.media == "Choice" &&
+            this.iiif_manifest.items[0].items[0].items[0].body["items"][0][
+              "type"
+            ] == "Sound"
+          ) {
+            this.media = "Sound";
+          }
+
           this.uv_config = "no-download-uv-config.json";
-          if (this.media == "Video" || this.media == "Choice") {
+
+          if (this.media == "Video") {
             const videoOptions = {
               autoplay: false,
               controls: true,
@@ -72,35 +83,44 @@ export default {
                 type: this.iiif_manifest.items[0].items[0].items[0].body[1]
                   .format
               }
-              // For choice format iiif manifests
-              // {
-              //   src: this.iiif_manifest.items[1].items[0].items[0].body[
-              //     "items"
-              //   ][0]["id"],
-              //   type: this.iiif_manifest.items[1].items[0].items[0].body[
-              //     "items"
-              //   ][0]["format"]
-              // },
-              // {
-              //   src: this.iiif_manifest.items[0].items[0].items[0].body[
-              //     "items"
-              //   ][1]["id"],
-              //   type: this.iiif_manifest.items[0].items[0].items[0].body[
-              //     "items"
-              //   ][1]["format"]
-              // }
             ];
             this.options = videoOptions;
             console.log(this.options);
+          } else if (this.media == "Choice") {
+            const videoOptions = {
+              autoplay: false,
+              controls: true,
+              fill: true,
+              sources: []
+            };
+            videoOptions.sources = [
+              // For choice format iiif manifests
+              {
+                src: this.iiif_manifest.items[0].items[0].items[0].body[
+                  "items"
+                ][0]["id"],
+                type: this.iiif_manifest.items[0].items[0].items[0].body[
+                  "items"
+                ][0]["format"]
+              },
+              {
+                src: this.iiif_manifest.items[0].items[0].items[0].body[
+                  "items"
+                ][1]["id"],
+                type: this.iiif_manifest.items[0].items[0].items[0].body[
+                  "items"
+                ][1]["format"]
+              }
+            ];
+            this.options = videoOptions;
           } else {
             this.options = {
               iiif_manifest: this.iiif_manifest,
               iiif_manifest_url: this.iiif_manifest_url,
-              media: this.media,
+              media: this.media, //can't be choice update to be type
               uv_config: this.uv_config
             };
           }
-
           break;
         default:
           this.media = "Image";
