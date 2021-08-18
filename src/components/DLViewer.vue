@@ -52,7 +52,7 @@ export default {
             this.media =
               this.iiif_manifest.items[0].items[0].items[0].body[0].type;
           }
-          console.log(this.media);
+          // console.log(this.media);
           //If media is choice, also check the nested type to see if sound. if so, reset media to sound
           if (
             this.media == "Choice" &&
@@ -85,7 +85,7 @@ export default {
               }
             ];
             this.options = videoOptions;
-            console.log(this.options);
+            // console.log(this.options);
           } else if (this.media == "Choice") {
             const videoOptions = {
               autoplay: false,
@@ -117,7 +117,7 @@ export default {
             this.options = {
               iiif_manifest: this.iiif_manifest,
               iiif_manifest_url: this.iiif_manifest_url,
-              media: this.media, //can't be choice update to be type
+              media: this.media,
               uv_config: this.uv_config
             };
           }
