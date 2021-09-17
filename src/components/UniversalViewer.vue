@@ -1,5 +1,12 @@
 <template>
-  <div class="universalviewer" id="uv" />
+  <suspense>
+    <template #default>
+      <div class="universalviewer" id="uv" />
+    </template>
+    <template #fallback>
+      <div>Loading...</div>
+    </template>
+  </suspense>
 </template>
 
 <script>
@@ -12,7 +19,7 @@ export default {
       required: true
     }
   },
-  watch: {
+  /*atch: {
     options: {
       handler: function (newVal, oldVal) {
         console.log("The uv has changed!");
@@ -21,7 +28,7 @@ export default {
       },
       immediate: true
     }
-  },
+  },*/
   methods: {
     loadUV(e) {
       console.log("in loaduv test");
