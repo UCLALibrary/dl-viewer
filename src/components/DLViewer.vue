@@ -1,7 +1,14 @@
 <template>
-  <div class="dl-viewer">
-    <component :is="viewer" :options="options" />
-  </div>
+  <suspense>
+    <template #default>
+      <div class="dl-viewer">
+        <component :is="viewer" :options="options" v-if="hasData" />
+      </div>
+    </template>
+    <template #fallback>
+      <div>Loading...</div>
+    </template>
+  </suspense>
 </template>
 
 <script>
@@ -32,8 +39,16 @@ export default {
       media: "",
       uv_config: "",
       options: {},
-      viewer: null
+      viewer: null,
+      hasData: false
     };
+  },
+  computed: {
+    isUniversalViewer() {
+      let showScript = false;
+      if (viewer == "UniversalViewer") return true;
+      return showScript;
+    }
   },
   async created() {
     try {
@@ -96,6 +111,7 @@ export default {
     } catch (error) {
       console.log(error.response);
     }
+    this.hasData = true;
   }
 };
 </script>

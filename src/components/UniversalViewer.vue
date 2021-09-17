@@ -19,7 +19,8 @@ export default {
       required: true
     }
   },
-  /*atch: {
+
+  /*watch: {
     options: {
       handler: function (newVal, oldVal) {
         console.log("The uv has changed!");
@@ -32,16 +33,17 @@ export default {
   methods: {
     loadUV(e) {
       console.log("in loaduv test");
-      const urlDataProvider = new UV.URLDataProvider(true);
-      var formattedLocales;
-      var locales = urlDataProvider.get("locales", "");
+
+      let urlDataProvider = new UV.URLDataProvider(true);
+      let formattedLocales;
+      let locales = urlDataProvider.get("locales", "");
 
       if (locales) {
-        var names = locales.split(",");
+        const names = locales.split(",");
         formattedLocales = [];
 
-        for (var i in names) {
-          var nameparts = String(names[i]).split(":");
+        for (let i in names) {
+          const nameparts = String(names[i]).split(":");
           formattedLocales[i] = {
             name: nameparts[0],
             label: nameparts[1]
