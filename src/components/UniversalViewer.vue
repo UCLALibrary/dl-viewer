@@ -83,10 +83,10 @@ export default {
   // TODO: Pass manifest && config options as parameters, instead of getting them from URL (only <App> should look at URL)
   mounted() {
     console.log("In mounted");
-    /* let jqueryScript = document.createElement("script");
+    let jqueryScript = document.createElement("script");
     jqueryScript.setAttribute("src", "/jquery/jquery.js");
     jqueryScript.setAttribute("id", "jquery");
-    document.head.appendChild(jqueryScript);*/
+    document.head.appendChild(jqueryScript);
 
     let offlineScript = document.createElement("script");
     offlineScript.setAttribute("src", "/uv/lib/offline.js");
@@ -113,8 +113,8 @@ export default {
     const helpers = document.getElementById("helpers");
     helpers.parentElement.removeChild(helpers);
 
-    /*const jquery = document.getElementById("jquery");
-    jquery.parentElement.removeChild(jquery);*/
+    const jquery = document.getElementById("jquery");
+    jquery.parentElement.removeChild(jquery);
 
     const uv = document.getElementById("uv");
     uv.parentElement.removeChild(uv);
