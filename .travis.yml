@@ -3,11 +3,11 @@ dist: xenial
 os: linux
 
 node_js:
-  - 'v14.17.4'
+  - '8.9.1'
   # https://github.com/UniversalViewer/universalviewer/blob/d8f9ec7f1fb1beeb9e6198ca4f27e189aea92b00/.travis.yml#L2-L3
 
 script:
-  - npm run build
+  - sh ./build.sh
 
 deploy:
   - provider: s3
