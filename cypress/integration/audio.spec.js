@@ -1,6 +1,16 @@
+/* eslint-disable prettier/prettier */
+/* eslint-disable no-undef */
 describe('An audio object', () => {
+  it('loads Universal Viewer in an iframe', () => {
+      cy.visit('#?manifest=https%3A%2F%2Fiiif.library.ucla.edu%2Fark%253A%252F21198%252Fzz002dw04s%2Fmanifest')
+      cy.frameLoaded({
+        url:
+          'https://p-w-dl-viewer01.library.ucla.edu/#?manifest=https%3A%2F%2Fiiif.library.ucla.edu%2Fark%253A%252F21198%252Fzz0026hvpq%2Fmanifest',
+      });
+    })
+
     it('loads in Universal Viewer!', () => {
-      cy.visit('/#?manifest=https%3A%2F%2Fiiif.library.ucla.edu%2Fark%253A%252F21198%252Fzz002dw04s%2Fmanifest')
+      cy.visit('/uv.html#?manifest=https%3A%2F%2Fiiif.library.ucla.edu%2Fark%253A%252F21198%252Fzz002dw04s%2Fmanifest')
   
       // Shows track title
       cy.contains('div.title', "Side A").should("exist").should("be.visible")
