@@ -30,6 +30,7 @@ export default {
     };
   },
   mounted() {
+    this.$gtm.enable(true);
     this.player = videojs(
       this.$refs.videoPlayer,
       this.options,
@@ -42,6 +43,7 @@ export default {
     if (this.player) {
       this.player.dispose();
     }
+    this.$gtm.enable(false);
   },
 };
 </script>
