@@ -1,6 +1,18 @@
 describe('A manuscript', () => {
+  const URL_PARAMETERS = '#?manifest=https%3A%2F%2Fiiif.library.ucla.edu%2Fark%253A%252F21198%252Fzz0009gx6g%2Fmanifest'
+
+  it('loads Universal Viewer in an iframe', () => {
+    cy.visit('/' + URL_PARAMETERS)
+
+    // UV loads inside an iframe
+    cy.frameLoaded("#universalviewer-iframe", {
+      url: '/uv.html' + URL_PARAMETERS,
+    });
+  })
+
+
   it('loads in Universal Viewer!', () => {
-    cy.visit('/#?manifest=https%3A%2F%2Fiiif.library.ucla.edu%2Fark%253A%252F21198%252Fzz0009gx6g%2Fmanifest')
+    cy.visit('/uv.html' + URL_PARAMETERS)
 
     // Shows title
     cy.contains('div.title', "Manuscript No. 1: Gladzor Gospels").should("exist").should("be.visible")
