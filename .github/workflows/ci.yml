@@ -15,5 +15,5 @@ jobs:
     - uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
     - uses: cypress-io/github-action@224f894ce0b082eba28a3a4562f630c54a17b432
       with:
-        start: npm run serve
+        start: yarn serve
         wait-on: 'http://localhost:8080'
