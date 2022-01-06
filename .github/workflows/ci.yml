@@ -6,8 +6,6 @@ on:
   pull_request:
     branches: [ main ]
 
-# env:
-
 jobs:
   cypress:
     runs-on: ubuntu-latest
@@ -17,3 +15,45 @@ jobs:
       with:
         start: yarn serve
         wait-on: 'http://localhost:8080'
+
+  deploy:
+    needs: cypress
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
+      - name: set deployment parameters
+        run: |
+          if ${{ github.ref == 'refs/heads/main' }}
+          then
+            echo "DESTINATION_DIR=prod" >> $GITHUB_ENV
+          else
+            case ${{ github.head_ref || github.ref}} in
+              main)
+                ;;
+              stage*)
+                echo "DESTINATION_DIR=stage" >> $GITHUB_ENV
+                ;;
+              test*)
+                echo "DESTINATION_DIR=test" >> $GITHUB_ENV
+                ;;
+              dev*)
+                echo "DESTINATION_DIR=dev" >> $GITHUB_ENV
+                ;;
+            esac
+          fi
+      - uses: actions/setup-node@fd4bd829f2dd6b6c1420bd94a93449c54612ffc2
+        if: env.DESTINATION_DIR
+      - run: yarn install && yarn build
+        if: env.DESTINATION_DIR
+      - name: deploy
+        if: env.DESTINATION_DIR
+        uses: jakejarvis/s3-sync-action@be0c4ab89158cac4278689ebedd8407dd5f35a83
+        with:
+          args: --follow-symlinks --delete
+        env:
+          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: 'us-west-2'
+          SOURCE_DIR: 'dist'
+          DEST_DIR: ${{ env.DESTINATION_DIR }}
