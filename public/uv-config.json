@@ -5,8 +5,7 @@
   "modules": {
     "contentLeftPanel": {
       "options": {
-        "defaultToTreeEnabled": true,
-        "treeEnabled": true
+        "defaultToTreeEnabled": true
       }
     },
     "headerPanel": {
