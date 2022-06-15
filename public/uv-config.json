@@ -5,64 +5,35 @@
   "modules": {
     "contentLeftPanel": {
       "options": {
-        "autoExpandTreeEnabled": false,
-        "autoExpandTreeIfFewerThan": 20,
-        "branchNodesExpandOnClick": true,
-        "branchNodesSelectable": false,
         "defaultToTreeEnabled": true,
-        "defaultToTreeIfGreaterThan": 0,
-        "elideCount": 40,
-        "expandFullEnabled": true,
-        "galleryThumbChunkedResizingThreshold": 400,
-        "galleryThumbHeight": 320,
-        "galleryThumbLoadPadding": 3,
-        "galleryThumbWidth": 200,
-        "oneColThumbHeight": 320,
-        "oneColThumbWidth": 200,
-        "pageModeEnabled": true,
-        "panelAnimationDuration": 250,
-        "panelCollapsedWidth": 30,
-        "panelExpandedWidth": 255,
-        "panelOpen": true,
-        "tabOrder": "",
-        "thumbsCacheInvalidation": {
-          "enabled": true,
-          "paramType": "?"
-        },
-        "thumbsEnabled": true,
-        "thumbsExtraHeight": 8,
-        "thumbsImageFadeInDuration": 300,
-        "thumbsLoadRange": 15,
-        "treeEnabled": true,
-        "twoColThumbHeight": 150,
-        "twoColThumbWidth": 90
+        "treeEnabled": true
+      }
+    },
+    "headerPanel": {
+      "options": {
+        "settingsButtonEnabled": true
+      }
+    },
+    "footerPanel": {
+      "options": {
+        "downloadEnabled": true,
+        "moreInfoEnabled": false,
+        "printEnabled": false,
+        "shareEnabled": false
       },
-      "headerPanel": {
-        "options": {
-          "settingsButtonEnabled": true
-        }
-      },
-      "footerPanel": {
-        "options": {
-          "downloadEnabled": true,
-          "moreInfoEnabled": false,
-          "printEnabled": false,
-          "shareEnabled": false
-        },
-        "content": {
-          "download": "Download ",
-          "exitFullScreen": "Exit Full Screen",
-          "fullScreen": "Full Screen"
-        }
-      },
-      "downloadDialogue": {
-        "options": {
-          "confinedImageSize": 200,
-          "currentViewDisabledPercentage": 90,
-          "maxImageWidth": 5000,
-          "optionsExplanatoryTextEnabled": true,
-          "selectionEnabled": false
-        }
+      "content": {
+        "download": "Download ",
+        "exitFullScreen": "Exit Full Screen",
+        "fullScreen": "Full Screen"
+      }
+    },
+    "downloadDialogue": {
+      "options": {
+        "confinedImageSize": 200,
+        "currentViewDisabledPercentage": 90,
+        "maxImageWidth": 5000,
+        "optionsExplanatoryTextEnabled": true,
+        "selectionEnabled": false
       }
     }
   }
