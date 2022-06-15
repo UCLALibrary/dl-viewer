@@ -55,7 +55,6 @@
           "fullScreen": "Full Screen"
         }
       },
-
       "downloadDialogue": {
         "options": {
           "confinedImageSize": 200,
