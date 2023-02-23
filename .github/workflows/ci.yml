@@ -11,9 +11,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 16
+        cache: 'npm'
     - uses: cypress-io/github-action@224f894ce0b082eba28a3a4562f630c54a17b432
       with:
-        start: yarn serve
+        start: npm run serve
         wait-on: 'http://localhost:8080'
 
   deploy:
@@ -21,6 +25,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'npm'
       - name: set deployment parameters
         run: |
           if ${{ github.ref == 'refs/heads/main' }}
@@ -43,7 +51,7 @@ jobs:
           fi
       - uses: actions/setup-node@fd4bd829f2dd6b6c1420bd94a93449c54612ffc2
         if: env.DESTINATION_DIR
-      - run: yarn install && yarn build
+      - run: npm install && npm run build
         if: env.DESTINATION_DIR
       - name: deploy
         if: env.DESTINATION_DIR
