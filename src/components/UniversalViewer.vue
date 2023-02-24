@@ -1,10 +1,11 @@
 <template>
   <iframe
-    class='universalviewer'
+    class="universalviewer"
     :src="iframe_target_url"
-    id='universalviewer-iframe'
+    id="universalviewer-iframe"
     allowfullscreen
-    frameborder='0' />
+    frameborder="0"
+  />
 </template>
 
 <script>
