@@ -14,7 +14,8 @@ export default {
   name: "DLViewer",
   components: {
     VideoJS: defineAsyncComponent(() => import("./VideoJS.vue")),
-    UniversalViewer: defineAsyncComponent(() => import("./UniversalViewer.vue"))
+    UniversalViewer: defineAsyncComponent(() => import("./UniversalViewer.vue")),
+    UniversalViewer3: defineAsyncComponent(() => import("./UniversalViewer3.vue")),
   },
   props: {
     iiif_manifest_url: {
@@ -45,15 +46,11 @@ export default {
       //Check both formats of iiif manifests for type
       switch (this.iiif_manifest["@context"]) {
         case "http://iiif.io/api/presentation/3/context.json":
-          if (this.iiif_manifest.items[0].items[0].items[0].body["type"]) {
-            this.media =
-              this.iiif_manifest.items[0].items[0].items[0].body["type"];
-          } else {
-            this.media =
-              this.iiif_manifest.items[0].items[0].items[0].body[0].type;
-          }
-          // console.log(this.media);
-          //If media is choice, also check the nested type to see if sound. if so, reset media to sound
+          this.media =
+            this.iiif_manifest.items[0].items[0].items[0].body["type"] ||
+            this.iiif_manifest.items[0].items[0].items[0].body[0].type;
+
+            //If media is choice, also check the nested type to see if sound. if so, reset media to sound
           if (
             this.media == "Choice" &&
             this.iiif_manifest.items[0].items[0].items[0].body["items"][0][
@@ -62,6 +59,7 @@ export default {
           ) {
             this.media = "Sound";
           }
+          console.log(this.media)
 
           this.uv_config = "no-download-uv-config.json";
 
@@ -134,8 +132,12 @@ export default {
           };
       }
 
-      this.viewer = this.media == "Video" ? "VideoJS" : "UniversalViewer";
-      // console.log("Media" + this.media);
+      this.viewer = new Map([
+        ["Video", "VideoJS"],
+        ["Sound", "UniversalViewer3"],
+        ["Image", "UniversalViewer"],
+      ]).get(this.media) || "UniversalViewer" // default to UV4
+
     } catch (error) {
       console.log(error.response);
     }
@@ -143,7 +145,6 @@ export default {
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .dl-viewer {
   width: 100%;

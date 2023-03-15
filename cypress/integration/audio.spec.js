@@ -6,13 +6,13 @@ describe('An audio object', () => {
 
       // UV loads inside an iframe
       cy.frameLoaded("#universalviewer-iframe", {
-        url: '/uv.html' + URL_PARAMETERS,
+        url: '/uv3.html' + URL_PARAMETERS,
       });
     })
   
 
     it('loads in Universal Viewer!', () => {
-      cy.visit('/uv.html' + URL_PARAMETERS)
+      cy.visit('/uv3.html' + URL_PARAMETERS)
 
       // Shows track title
       cy.contains("Side A").should("exist").should("be.visible")

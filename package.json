@@ -7,7 +7,8 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "copy-uv": "rimraf public/uv && cp -R node_modules/universalviewer/dist public/uv",
-    "postinstall": "npm run copy-uv"
+    "copy-uv3": "rimraf public/uv3 && cp -R node_modules/universalviewer3/dist public/uv3",
+    "postinstall": "npm run copy-uv && npm run copy-uv3"
   },
   "dependencies": {
     "axios": "^0.21.3",
@@ -16,6 +17,7 @@
     "jquery": "^3.3.1",
     "mediaelement": "^4.2.16",
     "universalviewer": "^4.0.17",
+    "universalviewer3": "npm:universalviewer@^3.1.4",
     "video.js": "^7.14.3",
     "vue": "^3.0.0",
     "vue-gtm": "^3.5.0"
