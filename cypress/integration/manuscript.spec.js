@@ -10,32 +10,31 @@ describe('A manuscript', () => {
     });
   })
 
-
   it('loads in Universal Viewer!', () => {
     cy.visit('/uv.html' + URL_PARAMETERS)
 
     // Shows title
-    cy.contains('div.title', "Manuscript No. 1: Gladzor Gospels").should("exist").should("be.visible")
+    cy.contains('.title', "Manuscript No. 1: Gladzor Gospels").should("exist").should("be.visible")
 
     // Settings Button
-    cy.contains("button", "Settings").should("exist").should("be.visible")
+    cy.get("button.settings").should("exist").should("be.visible")
 
     // left panel
     // is visible, first page selected
     cy.get(".leftPanel").should("exist").should("be.visible")
-      .get("#thumb0").should("have.class", "selected")
+      .get("#thumb-0 > .thumb").should("have.class", "selected")
     // navigate to 3rd page by clicking thumbnail
-    cy.get("#thumb2").should("not.have.class", "selected")
-      .get("#thumb2 > div.wrap.loaded > img").click()
-      .get("#thumb0").should("not.have.class", "selected")
-      .get("#thumb1").should("have.class", "selected")
-      .get("#thumb2").should("have.class", "selected")
+    cy.get("#thumb-2 > .thumb").should("not.have.class", "selected")
+      .get("#thumb-2 img").click()
+      .get("#thumb-0 > .thumb").should("not.have.class", "selected")
+      .get("#thumb-1 > .thumb").should("have.class", "selected")
+      .get("#thumb-2 > .thumb").should("have.class", "selected")
     // navigate to 4th page by clicking thumbnail
-    cy.get("#thumb3").should("not.have.class", "selected")
+    cy.get("#thumb-3 > .thumb").should("not.have.class", "selected")
       .contains("[Gladzor Gospels: page 2]").click()
-      .get("#thumb2").should("not.have.class", "selected")
-      .get("#thumb3").should("have.class", "selected")
-      .get("#thumb4").should("have.class", "selected")
+      .get("#thumb-2 > .thumb").should("not.have.class", "selected")
+      .get("#thumb-3 > .thumb").should("have.class", "selected")
+      .get("#thumb-4 > .thumb").should("have.class", "selected")
     // collapse left panel
     cy.get(".expandFullButton").should("exist").should("not.be.visible")
       .get(".collapseButton").should("exist").should("be.visible").click()

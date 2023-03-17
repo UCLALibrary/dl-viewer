@@ -21,7 +21,8 @@ export default {
   computed: {
     iframe_target_url() {
       const fixed_url = new URL(window.location.toString().replace("#?", "?")); // for some reason the URL format we inherited used '#?' to indicate query parameters, but URLSearchParams won't parse this.
-      return `uv.html#${fixed_url.search}`
+      
+      return `uv3.html#${fixed_url.search}`
     }
   }
 };

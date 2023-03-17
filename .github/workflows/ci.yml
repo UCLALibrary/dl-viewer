@@ -49,8 +49,6 @@ jobs:
                 ;;
             esac
           fi
-      - uses: actions/setup-node@fd4bd829f2dd6b6c1420bd94a93449c54612ffc2
-        if: env.DESTINATION_DIR
       - run: npm install && npm run build
         if: env.DESTINATION_DIR
       - name: deploy

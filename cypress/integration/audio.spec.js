@@ -6,19 +6,19 @@ describe('An audio object', () => {
 
       // UV loads inside an iframe
       cy.frameLoaded("#universalviewer-iframe", {
-        url: '/uv.html' + URL_PARAMETERS,
+        url: '/uv3.html' + URL_PARAMETERS,
       });
     })
   
 
     it('loads in Universal Viewer!', () => {
-      cy.visit('/uv.html' + URL_PARAMETERS)
+      cy.visit('/uv3.html' + URL_PARAMETERS)
 
       // Shows track title
       cy.contains("Side A").should("exist").should("be.visible")
   
       // Settings Button
-      cy.contains("button", "Settings").should("exist").should("be.visible")
+      cy.get("button.settings").should("exist").should("be.visible")
   
       // left panel is enabled
       cy.get(".leftPanel").should("exist").should("be.visible")
@@ -27,7 +27,7 @@ describe('An audio object', () => {
       cy.contains("Print").should("not.exist")
   
       // "Share" is disabled
-      cy.contains("Share").should("exist").should("not.be.visible")
+      cy.get("button.share").should("exist").should("not.be.visible")
   
       // Enter / exit fullcreen view
       cy.contains("Full Screen").should("exist").should("be.visible")

@@ -15,10 +15,10 @@ describe('A simple image', () => {
     cy.visit('/uv.html' + URL_PARAMETERS)
 
     // Shows title
-    cy.contains('div.title', "1985 - The California Poppy").should("exist").should("be.visible")
+    cy.contains('.title', "1985 - The California Poppy").should("exist").should("be.visible")
 
     // Settings Button
-    cy.contains("button", "Settings").should("exist").should("be.visible")
+    cy.get("button.settings").should("exist").should("be.visible")
 
     // left panel is disabled
     cy.get(".leftPanel").should("exist").should("not.be.visible")

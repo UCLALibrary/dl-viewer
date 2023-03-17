@@ -2,8 +2,11 @@
 node_modules
 /dist
 /public/uv
+/public/uv3
 /public/mejs
 /public/jquery
+/cypress/screenshots
+/cypress/videos
 
 
 # local env files
