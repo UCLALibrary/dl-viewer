@@ -55,7 +55,6 @@
       }, urlDataProvider);
       
       uv.on("created", function(obj) {
-      console.log('two');
           resouceType = document.getElementsByClassName("blacklight-human_readable_resource_type_tesim metadata-block__label-value metadata-block__label-value--ursus")[0].innerText;
           if (resouceType.includes("moving image") || resouceType.includes("sound recording")) {
               document.getElementsByClassName("download btn imageBtn")[0].innerHTML="<i class=\"uv-icon uv-icon-download\" aria-hidden=\"true\" style=\"display:none;\"></i>Download ";

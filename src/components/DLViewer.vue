@@ -23,123 +23,94 @@ export default {
       required: true
     }
   },
-
   data() {
     return {
-      iiif_manifest: {},
-      media: "",
-      uv_config: "",
-      options: {},
-      viewer: null
+      iiif_manifest: null,
     };
+  },
+  computed: {
+    firstItemType() {
+      console.log(this.isV3Manifest && this.iiif_manifest)
+      if (this.isV3Manifest) {
+        // Non-image content currently only uses IIIF v3
+        return (
+          this.iiif_manifest?.items?.[0]?.items?.[0]?.items?.[0]?.body?.type ||
+          this.iiif_manifest?.items?.[0]?.items?.[0]?.items?.[0]?.body?.[0]?.type
+        )
+      } else {
+        return "Image"
+      }
+    },
+    firstItemTypeFromChoice() {
+      return this.isChoice && this.iiif_manifest.items[0].items[0].items[0].body.items[0].type
+    },
+    isChoice() {
+      return (this.firstItemType == "Choice")
+    },
+    isCollection() {
+      return (
+        this.iiif_manifest &&
+        this.iiif_manifest.type &&
+        this.iiif_manifest.type == "Collection")
+    },
+    isImage() {
+      return (this.firstItemType == "Image")
+    },
+    isSound() {
+      return (this.firstItemType == "Sound" || this.firstItemTypeFromChoice == "Sound")
+    },
+    isVideo() {
+      return (this.firstItemType == "Video" || this.firstItemTypeFromChoice == "Video")
+    },
+    isV3Manifest() {
+      return (
+        this.iiif_manifest &&
+        this.iiif_manifest["@context"] == "http://iiif.io/api/presentation/3/context.json"
+      )
+    },
+    options() {
+      if (this.iiif_manifest == {}) {
+        return {}
+      } else if (this.isVideo) {
+        return {
+          autoplay: false,
+          controls: true,
+          fill: true,
+          sources: this.videoSources.map((source) => ({ src: source.id, type: source.format})),
+        }
+      } else {
+        return {
+          iiif_manifest: this.iiif_manifest,
+          iiif_manifest_url: this.iiif_manifest_url,
+          uv_config: this.isSound ? "no-download-uv-config.json" : "uv-config.json",
+        }
+      }
+    },
+    videoSources() {
+      if (!this.isVideo) {
+        return null
+      } else if (this.isChoice) {
+        return this.iiif_manifest.items[0].items[0].items[0].body.items
+      } else {
+        return this.iiif_manifest.items[0].items[0].items[0].body
+      }
+    },
+    viewer() {
+      return (
+        this.isCollection ? "UniversalViewer" :
+        this.isVideo ? "VideoJS" :
+        this.isSound ? "UniversalViewer3" :
+        this.isImage ? "UniversalViewer" :
+        "UniversalViewer"
+      )
+    },
   },
   async created() {
     try {
-      // console.log("encode" + encodeURIComponent(this.iiif_manifest_url));
       const response = await axios.get(this.iiif_manifest_url);
-      // console.log(response.data);
       this.iiif_manifest = response.data;
-      this.uv_config = "";
-      this.options = {};
-
-      // Media format for viewer
-      //Check both formats of iiif manifests for type
-      switch (this.iiif_manifest["@context"]) {
-        case "http://iiif.io/api/presentation/3/context.json":
-          this.media =
-            this.iiif_manifest.items[0].items[0].items[0].body["type"] ||
-            this.iiif_manifest.items[0].items[0].items[0].body[0].type;
-
-            //If media is choice, also check the nested type to see if sound. if so, reset media to sound
-          if (
-            this.media == "Choice" &&
-            this.iiif_manifest.items[0].items[0].items[0].body["items"][0][
-              "type"
-            ] == "Sound"
-          ) {
-            this.media = "Sound";
-          }
-          console.log(this.media)
-
-          this.uv_config = "no-download-uv-config.json";
-
-          if (this.media == "Video") {
-            const videoOptions = {
-              autoplay: false,
-              controls: true,
-              fill: true,
-              sources: []
-            };
-            videoOptions.sources = [
-              {
-                src: this.iiif_manifest.items[0].items[0].items[0].body[0].id,
-                type: this.iiif_manifest.items[0].items[0].items[0].body[0]
-                  .format
-              },
-              {
-                src: this.iiif_manifest.items[0].items[0].items[0].body[1].id,
-                type: this.iiif_manifest.items[0].items[0].items[0].body[1]
-                  .format
-              }
-            ];
-            this.options = videoOptions;
-            // console.log(this.options);
-          } else if (this.media == "Choice") {
-            const videoOptions = {
-              autoplay: false,
-              controls: true,
-              fill: true,
-              sources: []
-            };
-            videoOptions.sources = [
-              // For choice format iiif manifests
-              {
-                src: this.iiif_manifest.items[0].items[0].items[0].body[
-                  "items"
-                ][0]["id"],
-                type: this.iiif_manifest.items[0].items[0].items[0].body[
-                  "items"
-                ][0]["format"]
-              },
-              {
-                src: this.iiif_manifest.items[0].items[0].items[0].body[
-                  "items"
-                ][1]["id"],
-                type: this.iiif_manifest.items[0].items[0].items[0].body[
-                  "items"
-                ][1]["format"]
-              }
-            ];
-            this.options = videoOptions;
-            this.media = "Video";
-          } else {
-            this.options = {
-              iiif_manifest: this.iiif_manifest,
-              iiif_manifest_url: this.iiif_manifest_url,
-              media: this.media,
-              uv_config: this.uv_config
-            };
-          }
-          break;
-        default:
-          this.media = "Image";
-          this.uv_config = "uv-config.json";
-          this.options = {
-            iiif_manifest: this.iiif_manifest,
-            iiif_manifest_url: this.iiif_manifest_url,
-            media: this.media,
-            uv_config: this.uv_config
-          };
-      }
-
-      this.viewer = new Map([
-        ["Video", "VideoJS"],
-        ["Sound", "UniversalViewer3"],
-        ["Image", "UniversalViewer"],
-      ]).get(this.media) || "UniversalViewer" // default to UV4
-
     } catch (error) {
-      console.log(error.response);
+      console.warn(error.response);
     }
   }
 };
