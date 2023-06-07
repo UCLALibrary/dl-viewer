@@ -49,7 +49,7 @@ export default {
         Exceptions...)\
         <ul style="margin: 0px">\
           <li>\
-            <em>Reason:</em> IIIF Auth 1.0 specifies that viewers must open a\
+            <em>Reason:</em> IIIF Authentication 1.0 specifies that viewers must open a\
             new window as part of this particular authentication flow, which is not\
             possible unless you allow pop-ups from our site\
           </li>\
@@ -59,7 +59,7 @@ export default {
         Disable &quot;Enhanced Tracking Protection&quot;\
         <ul style="margin: 0px">\
           <li>\
-            <em>Reason:</em> IIIF Auth 1.0 specifies that viewers must set a\
+            <em>Reason:</em> IIIF Authentication 1.0 specifies that viewers must set a\
             IIIF access cookie during this particular authentication f\low, which is not\
             possible unless Firefox will allow us to use a cookie when you are using our site\
           </li>\
