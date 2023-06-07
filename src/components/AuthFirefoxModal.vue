@@ -122,7 +122,7 @@ export default {
 
 .close-icon {
   width: 16px;
-  height: 16px;
+  height: 24px;
   fill: currentColor;
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <auth-firefox-modal
     v-if="isFirefox"
-    title="Firefox users please follow these instructions:"
+    title="To use the high quality image content available for this item in Firefox, you will need to adjust some settings."
     :message="modalMessage"
   />
 
@@ -50,8 +50,8 @@ export default {
         <ul style="margin: 0px">\
           <li>\
             <em>Reason:</em> IIIF Auth 1.0 specifies that viewers must open a\
-            new window as part of this particular auth flow, which is not\
-            possible unless this step is taken\
+            new window as part of this particular authentication flow, which is not\
+            possible unless you allow pop-ups from our site\
           </li>\
         </ul>\
       </li>\
@@ -60,8 +60,8 @@ export default {
         <ul style="margin: 0px">\
           <li>\
             <em>Reason:</em> IIIF Auth 1.0 specifies that viewers must set a\
-            IIIF access cookie during this particular auth f\low, which is not\
-            possible unless this step is taken\
+            IIIF access cookie during this particular authentication f\low, which is not\
+            possible unless Firefox will allow us to use a cookie when you are using our site\
           </li>\
         </ul>\
       </li>\
