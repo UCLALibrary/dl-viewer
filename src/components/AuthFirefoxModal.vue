@@ -14,7 +14,7 @@
           </svg>
         </button>
       </div>
-      <h2>{{ title }}</h2>
+      <h3 class="modal-title">{{ title }}</h3>
 
       <button class="collapse-button" @click="toggleCollapse">
         <div class="collapse-button-content">
@@ -31,7 +31,7 @@
         </div>
       </button>
       <div v-if="!collapsed">
-        <div v-html="message" />
+        <div class="detail-text" v-html="message" />
       </div>
     </div>
   </div>
@@ -85,6 +85,39 @@ export default {
   padding: 20px;
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  width: 60%;
+}
+.modal-title {
+  font-size: 1.25rem;
+}
+@media (max-width: 1024px) {
+  .modal-overlay {
+    margin: 10px;
+  }
+  .modal {
+    width: 60%;
+    margin: 10px;
+    padding: 10px;
+  }
+  .modal-title {
+    font-size: 1rem;
+  }
+  .detail-text {
+    font-size: 13px;
+  }
+}
+@media (max-width: 750px) {
+  .modal {
+    width: 60%;
+    margin: 10px;
+    padding: 10px;
+  }
+  .modal-title {
+    font-size: 0.95rem;
+  }
+  .detail-text {
+    font-size: 12px;
+  }
 }
 .collapse-button {
   margin-bottom: 10px;
