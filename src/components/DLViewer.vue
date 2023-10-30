@@ -72,11 +72,17 @@ export default {
       if (this.iiif_manifest == {}) {
         return {}
       } else if (this.isVideo) {
+        const filteredSources = this.videoSources.filter((source) => (
+          (this.isAppleOrIOS && source.format === "application/vnd.apple.mpegurl") ||
+          (!this.isAppleOrIOS && source.format === "application/dash+xml")
+        ))
         return {
           autoplay: false,
           controls: true,
           fill: true,
-          sources: this.videoSources.map((source) => ({ src: source.id, type: source.format})),
+          sources: filteredSources.map((source) => (
+            { src: source.id, type: source.format} // HLS for Safari
+          )),
         }
       } else {
         return {
@@ -85,6 +91,10 @@ export default {
           uv_config: this.isSound ? "no-download-uv-config.json" : "uv-config.json",
         }
       }
+    },
+    isAppleOrIOS(){
+      console.log("user agent info", navigator.userAgent)
+      return /(Apple|iOS)/.test(navigator.userAgent)
     },
     videoSources() {
       if (!this.isVideo) {
