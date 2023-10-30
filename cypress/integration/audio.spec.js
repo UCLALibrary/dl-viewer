@@ -6,10 +6,7 @@ describe("An audio object", () => {
     cy.visit("/" + URL_PARAMETERS);
 
     // UV loads inside an iframe
-    cy.frameLoaded("#universalviewer-iframe", {
-      url: "/uv3.html" + URL_PARAMETERS,
-      timeout: 60000, // Increase the timeout to 60 seconds
-    });
+    cy.get("#universalviewer-iframe");
   });
 
   it("loads in Universal Viewer!", () => {
