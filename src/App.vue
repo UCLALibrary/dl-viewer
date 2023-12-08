@@ -2,6 +2,7 @@
   <DLViewer
     v-if="iiif_manifest_url && iiif_manifest_url.length > 0"
     :iiif_manifest_url="iiif_manifest_url"
+    :site="site"
   />
 </template>
 
@@ -14,9 +15,11 @@ export default {
     DLViewer,
   },
   computed: {
+    normalized_url() {
+      return new URL(window.location.toString().replace("#?", "?")); // for some reason the URL format we inherited used '#?' to indicate query parameters, but URLSearchParams won't parse this.
+    },
     iiif_manifest_url() {
-      const fixed_url = new URL(window.location.toString().replace("#?", "?")); // for some reason the URL format we inherited used '#?' to indicate query parameters, but URLSearchParams won't parse this.
-      let iiif_url = fixed_url.searchParams.get("manifest");
+      let iiif_url = this.normalized_url.searchParams.get("manifest");
       if (
         iiif_url &&
         iiif_url.includes("library.ucla.edu/") &&
@@ -30,6 +33,9 @@ export default {
       } else {
         return iiif_url;
       }
+    },
+    site() {
+      return this.normalized_url.searchParams.get("site", "");
     },
   },
 };

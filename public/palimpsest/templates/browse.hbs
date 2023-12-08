@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Browse | Sinai Palimpsests Project</title>
+    <script src="/js/jquery-1.11.1.min.js"></script>
+    {{> templates/common-head-nodes}}
+  </head>
+  <body class="sinai-body">
+    {{> templates/google-analytics-body}}
+    {{> templates/header}}
+    <div id="main" class="text-bg">
+      <div>
+        <h1>Search and Browse Manuscripts</h1>
+        <!-- if there are no records in Solr, show message indicating that the list is being refreshed -->
+        {{#unless error}}
+        <div id="browse-main-content">
+          <div id="search-bar">
+            <form action="/browse" method="get">
+            <label for="search-query">Keywords:</label>
+            <input id="search-query" name="search" type="text">
+            <input type="submit" value="Search">
+            </form>
+          </div>
+
+          <div id="search-results">
+            {{#if searchResults}}
+            <ul id="search-results-list">
+              {{#each searchResults}}
+              <li>
+                <a href="/viewer/{{urlencode manuscript.ark_s}}">
+                  <img class="browse-thumbnail" src="{{imageserver}}/iiif/{{manuscript.thumbnail_identifier_s}}" alt="{{manuscript.shelf_mark_s}}">
+                </a>
+                <div class="manuscript-metadata">
+                  {{formatManuscript manuscript}}
+
+                  <div class="accordion">
+                    <h2 class="undertexts-header">Undertexts &darr;</h2>
+                    <div class="undertexts-body">
+                      {{formatUndertextObjects undertext_objects}}
+                    </div>
+                  </div>
+                  <div class="accordion">
+                    <h2 class="folios-header">Folios &darr;</h2>
+                    <div class="folios-body">
+                      {{formatManuscriptComponents manuscript_components}}
+                    </div>
+                  </div>
+                </div>
+	          </li>
+	          {{/each}}
+	        </ul>
+	        {{else}}
+	        <p>No results!</p>
+	        {{/if}}
+          </div>
+
+        </div>
+        {{else}}
+        <div id="browse-error">
+          <h3>Error</h3>
+          <p>There was an error generating this page. Please report the following to the system administrator:</p>
+          <code class="error-code">{{error}}</code>
+        </div>
+        {{/unless}}
+
+      </div>
+    </div>
+    {{> templates/footer}}
+
+    <script>
+    $( ".accordion" ).accordion({
+      active: false,
+      collapsible: true,
+      heightStyle: "content"
+    });
+    </script>
+  </body>
+</html>

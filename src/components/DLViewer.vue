@@ -13,6 +13,8 @@ import { defineAsyncComponent } from "vue";
 export default {
   name: "DLViewer",
   components: {
+    Mirador: defineAsyncComponent(() => import("./Mirador.vue")),
+    MiradorPalimpsest: defineAsyncComponent(() => import("./MiradorPalimpsest.vue")),
     VideoJS: defineAsyncComponent(() => import("./VideoJS.vue")),
     UniversalViewer: defineAsyncComponent(() => import("./UniversalViewer.vue")),
     UniversalViewer3: defineAsyncComponent(() => import("./UniversalViewer3.vue")),
@@ -21,6 +23,10 @@ export default {
     iiif_manifest_url: {
       type: String,
       required: true
+    },
+    site: {
+      type: String,
+      default: "",
     }
   },
   data() {
@@ -30,7 +36,6 @@ export default {
   },
   computed: {
     firstItemType() {
-      console.log(this.isV3Manifest && this.iiif_manifest)
       if (this.isV3Manifest) {
         // Non-image content currently only uses IIIF v3
         return (
@@ -55,6 +60,12 @@ export default {
     },
     isImage() {
       return (this.firstItemType == "Image")
+    },
+    isSinai() {
+      return (this.site === "sinai")
+    },
+    isSinaiPalimpsest() {
+      return this.iiif_manifest_url.includes("sinai-images.library.ucla.edu")
     },
     isSound() {
       return (this.firstItemType == "Sound" || this.firstItemTypeFromChoice == "Sound")
@@ -107,6 +118,8 @@ export default {
     },
     viewer() {
       return (
+        this.isSinaiPalimpsest ? "MiradorPalimpsest" :
+        this.isSinai ? "Mirador" :
         this.isCollection ? "UniversalViewer" :
         this.isVideo ? "VideoJS" :
         this.isSound ? "UniversalViewer3" :
