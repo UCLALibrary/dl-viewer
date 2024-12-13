@@ -9,10 +9,13 @@
 
 import axios from "axios";
 import { defineAsyncComponent } from "vue";
+import _has from "lodash/has"
+import _get from "lodash/get"
 
 export default {
   name: "DLViewer",
   components: {
+    ImageTag: defineAsyncComponent(() => import("./ImageTag.vue")),
     Mirador: defineAsyncComponent(() => import("./Mirador.vue")),
     MiradorPalimpsest: defineAsyncComponent(() => import("./MiradorPalimpsest.vue")),
     VideoJS: defineAsyncComponent(() => import("./VideoJS.vue")),
@@ -48,6 +51,12 @@ export default {
     },
     firstItemTypeFromChoice() {
       return this.isChoice && this.iiif_manifest.items[0].items[0].items[0].body.items[0].type
+    },
+    hasIiifService() {
+      const iiifServicePath = this.isV3Manifest ?
+        "iiif_manifest.items[0].items[0].items[0].body[0].service" :
+        "iiif_manifest.sequences[0].canvases[0].images[0].resource.service"
+      return _has(this, iiifServicePath)
     },
     isChoice() {
       return (this.firstItemType == "Choice")
@@ -95,6 +104,13 @@ export default {
             { src: source.id, type: source.format} // HLS for Safari
           )),
         }
+      } else if (this.viewer == "ImageTag") {
+        return {
+          src: _get(this, "iiif_manifest.items[0].items[0].items[0].body.id"),
+          height: _get(this, "iiif_manifest.items[0].items[0].items[0].body.height"),
+          width: _get(this, "iiif_manifest.items[0].items[0].items[0].body.width"),
+          alt: _get(this, "iiif_manifest.label.none[0]", ""),
+        }
       } else {
         return {
           iiif_manifest: this.iiif_manifest,
@@ -123,7 +139,8 @@ export default {
         this.isCollection ? "UniversalViewer" :
         this.isVideo ? "VideoJS" :
         this.isSound ? "UniversalViewer3" :
-        this.isImage ? "UniversalViewer" :
+        this.isImage && this.hasIiifService ? "UniversalViewer" :
+        this.isImage && !this.hasIiifService ? "ImageTag" :
         "UniversalViewer"
       )
     },
