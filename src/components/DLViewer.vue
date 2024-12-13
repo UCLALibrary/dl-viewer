@@ -9,10 +9,13 @@
 
 import axios from "axios";
 import { defineAsyncComponent } from "vue";
+import _has from "lodash/has"
+import _get from "lodash/get"
 
 export default {
   name: "DLViewer",
   components: {
+    ImageTag: defineAsyncComponent(() => import("./ImageTag.vue")),
     Mirador: defineAsyncComponent(() => import("./Mirador.vue")),
     MiradorPalimpsest: defineAsyncComponent(() => import("./MiradorPalimpsest.vue")),
     VideoJS: defineAsyncComponent(() => import("./VideoJS.vue")),
@@ -49,14 +52,22 @@ export default {
     firstItemTypeFromChoice() {
       return this.isChoice && this.iiif_manifest.items[0].items[0].items[0].body.items[0].type
     },
+    hasIiifService() {
+      const iiifServicePath = this.isV3Manifest ?
+        "iiif_manifest.items[0].items[0].items[0].body.service" :
+        "iiif_manifest.sequences[0].canvases[0].images[0].resource.service"
+      const parts = iiifServicePath.split(".")
+      for (let i = 0; i < parts.length - 1; i++) {
+        let path = parts.slice(0, i + 1).join(".")
+      }
+      return _has(this, iiifServicePath)
+    },
     isChoice() {
       return (this.firstItemType == "Choice")
     },
     isCollection() {
-      return (
-        this.iiif_manifest &&
-        this.iiif_manifest.type &&
-        this.iiif_manifest.type == "Collection")
+      // Have seen "'@type': 'sc:Collection'" and "'type': 'Collection'"
+      return _get(this, "iiif_manifest.@type", _get(this, "iiif_manifest.type", "")).includes("Collection")
     },
     isImage() {
       return (this.firstItemType == "Image")
@@ -95,6 +106,13 @@ export default {
             { src: source.id, type: source.format} // HLS for Safari
           )),
         }
+      } else if (this.viewer == "ImageTag") {
+        return {
+          src: _get(this, "iiif_manifest.items[0].items[0].items[0].body.id"),
+          height: _get(this, "iiif_manifest.items[0].items[0].items[0].body.height"),
+          width: _get(this, "iiif_manifest.items[0].items[0].items[0].body.width"),
+          alt: _get(this, "iiif_manifest.label.none[0]", ""),
+        }
       } else {
         return {
           iiif_manifest: this.iiif_manifest,
@@ -104,7 +122,6 @@ export default {
       }
     },
     isAppleOrIOS(){
-      console.log("user agent info", navigator.userAgent)
       return /(Apple|iOS)/.test(navigator.userAgent)
     },
     videoSources() {
@@ -123,7 +140,8 @@ export default {
         this.isCollection ? "UniversalViewer" :
         this.isVideo ? "VideoJS" :
         this.isSound ? "UniversalViewer3" :
-        this.isImage ? "UniversalViewer" :
+        this.isImage && this.hasIiifService ? "UniversalViewer" :
+        this.isImage && !this.hasIiifService ? "ImageTag" :
         "UniversalViewer"
       )
     },
