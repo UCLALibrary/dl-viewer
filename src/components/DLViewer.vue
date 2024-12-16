@@ -66,6 +66,8 @@ export default {
       return (this.firstItemType == "Choice")
     },
     isCollection() {
+      console.log(this.iiif_manifest)
+
       // Have seen "'@type': 'sc:Collection'" and "'type': 'Collection'"
       return _get(this, "iiif_manifest.@type", _get(this, "iiif_manifest.type", "")).includes("Collection")
     },
