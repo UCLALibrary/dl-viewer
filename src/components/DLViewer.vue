@@ -56,12 +56,7 @@ export default {
       const iiifServicePath = this.isV3Manifest ?
         "iiif_manifest.items[0].items[0].items[0].body.service" :
         "iiif_manifest.sequences[0].canvases[0].images[0].resource.service"
-      console.log(this.isV3Manifest, iiifServicePath, _get(this, iiifServicePath))
-      const parts = iiifServicePath.split(".")
-      for (let i = 0; i < parts.length - 1; i++) {
-        let path = parts.slice(0, i + 1).join(".")
-        console.log(path, _get(this, path))
-      }
+      console.log(_has(this, iiifServicePath), _get(this, iiifServicePath))
       return _has(this, iiifServicePath)
     },
     isChoice() {
@@ -136,7 +131,6 @@ export default {
       }
     },
     viewer() {
-      console.log(this.isSinaiPalimpsest, this.isSinai, this.isCollection, this.isVideo, this.isSound, this.isImage, this.hasIiifService)
       return (
         this.isSinaiPalimpsest ? "MiradorPalimpsest" :
         this.isSinai ? "Mirador" :
