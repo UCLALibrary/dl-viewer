@@ -9,7 +9,6 @@
 
 import axios from "axios";
 import { defineAsyncComponent } from "vue";
-import _has from "lodash/has"
 import _get from "lodash/get"
 
 export default {
@@ -52,12 +51,12 @@ export default {
     firstItemTypeFromChoice() {
       return this.isChoice && this.iiif_manifest.items[0].items[0].items[0].body.items[0].type
     },
-    hasIiifService() {
+    getIiifService() {
       const iiifServicePath = this.isV3Manifest ?
         "iiif_manifest.items[0].items[0].items[0].body.service" :
         "iiif_manifest.sequences[0].canvases[0].images[0].resource.service"
-      console.log(_has(this, iiifServicePath), _get(this, iiifServicePath))
-      return _has(this, iiifServicePath)
+      console.log(_get(this, iiifServicePath), !!_get(this, iiifServicePath))
+      return !!_get(this, iiifServicePath)
     },
     isChoice() {
       return (this.firstItemType == "Choice")
