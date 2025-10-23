@@ -20,7 +20,8 @@
     "format": "prettier --write src/",
     "copy-uv": "rimraf public/uv && cp -R node_modules/universalviewer/dist public/uv",
     "copy-uv3": "rimraf public/uv3 && cp -R node_modules/universalviewer3/dist public/uv3",
-    "postinstall": "npm run copy-uv && npm run copy-uv3"
+    "copy-mirador-annotation-editor": "rimraf mae && cp -R node_modules/mirador-annotation-editor/dist mae",
+    "postinstall": "npm run copy-uv && npm run copy-uv3 && npm run copy-mirador-annotation-editor"
   },
   "dependencies": {
     "axios": "^0.21.3",
@@ -29,15 +30,19 @@
     "jquery": "^3.3.1",
     "lodash": "^4.17.21",
     "mediaelement": "^4.2.16",
+    "mirador": "^4.0.0",
+    "mirador-annotation-editor": "^1.1.3-rc4",
+    "mirador-image-tools": "^1.0.0",
     "universalviewer": "4.0.21",
     "universalviewer3": "npm:universalviewer@^3.1.4",
     "video.js": "^8.6.1",
-    "vue-gtm": "^3.5.0",
-    "vue": "^3.5.22"
+    "vue": "^3.5.22",
+    "vue-gtm": "^3.5.0"
   },
   "devDependencies": {
     "@tsconfig/node22": "^22.0.2",
     "@types/jsdom": "^21.1.7",
+    "@types/lodash": "^4.17.20",
     "@types/node": "^22.18.6",
     "@vitejs/plugin-vue": "^6.0.1",
     "@vitest/eslint-plugin": "^1.3.13",
@@ -54,6 +59,7 @@
     "jsdom": "^27.0.0",
     "npm-run-all2": "^8.0.4",
     "prettier": "3.6.2",
+    "rimraf": "^6.0.1",
     "start-server-and-test": "^2.1.2",
     "typescript": "~5.9.0",
     "vite": "^7.1.7",

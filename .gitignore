@@ -9,6 +9,10 @@ node_modules
 /cypress/videos
 
 
+# mirador annotation editor, temporarily copied while I wait for a fix on the npm package exports
+/mae
+
+
 # local env files
 .env.local
 .env.*.local

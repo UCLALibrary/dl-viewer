@@ -4,19 +4,26 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 /* eslint-disable */
 
 import axios from 'axios'
 import { defineAsyncComponent } from 'vue'
 import _get from 'lodash/get'
 
+const VIEWER_ALIASES = {
+  mirador: 'MiradorViewer',
+  img: 'ImageTag',
+  vidoejs: 'VideoJS',
+  uv: 'UniversalViewer',
+  uv3: 'UniversalViewer3',
+}
+
 export default {
   name: 'DLViewer',
   components: {
     ImageTag: defineAsyncComponent(() => import('./ImageTag.vue')),
-    Mirador: defineAsyncComponent(() => import('./Mirador.vue')),
-    MiradorPalimpsest: defineAsyncComponent(() => import('./MiradorPalimpsest.vue')),
+    MiradorViewer: defineAsyncComponent(() => import('./MiradorViewer.vue')),
     VideoJS: defineAsyncComponent(() => import('./VideoJS.vue')),
     UniversalViewer: defineAsyncComponent(() => import('./UniversalViewer.vue')),
     UniversalViewer3: defineAsyncComponent(() => import('./UniversalViewer3.vue')),
@@ -27,6 +34,10 @@ export default {
       required: true,
     },
     site: {
+      type: String,
+      default: '',
+    },
+    viewer_name: {
       type: String,
       default: '',
     },
@@ -71,9 +82,6 @@ export default {
     },
     isSinai() {
       return this.site === 'sinai'
-    },
-    isSinaiPalimpsest() {
-      return this.iiif_manifest_url.includes('sinai-images.library.ucla.edu')
     },
     isSound() {
       return this.firstItemType == 'Sound' || this.firstItemTypeFromChoice == 'Sound'
@@ -130,21 +138,22 @@ export default {
       }
     },
     viewer() {
-      return this.isSinaiPalimpsest
-        ? 'MiradorPalimpsest'
-        : this.isSinai
-          ? 'Mirador'
-          : this.isCollection
-            ? 'UniversalViewer'
-            : this.isVideo
-              ? 'VideoJS'
-              : this.isSound
-                ? 'UniversalViewer3'
-                : this.isImage && this.hasIiifService
-                  ? 'UniversalViewer'
-                  : this.isImage && !this.hasIiifService
-                    ? 'ImageTag'
-                    : 'UniversalViewer'
+      if (this.viewer_name) {
+        if (Object.hasOwn(VIEWER_ALIASES, this.viewer_name)) {
+          return VIEWER_ALIASES[this.viewer_name]
+        } else {
+          return this.viewer_name
+        }
+      }
+
+      if (this.isSinai) return 'MiradorViewer'
+      if (this.isCollection) return 'UniversalViewer'
+      if (this.isVideo) return 'VideoJS'
+      if (this.isSound) return 'UniversalViewer3'
+      if (this.isImage && this.hasIiifService) return 'UniversalViewer'
+      if (this.isImage && !this.hasIiifService) return 'ImageTag'
+
+      return 'UniversalViewer'
     },
   },
   async created() {

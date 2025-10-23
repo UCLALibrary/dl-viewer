@@ -3,6 +3,7 @@
     v-if="iiif_manifest_url && iiif_manifest_url.length > 0"
     :iiif_manifest_url="iiif_manifest_url"
     :site="site"
+    :viewer_name="viewer_name"
   />
 </template>
 
@@ -34,6 +35,9 @@ export default {
     },
     site() {
       return this.normalized_url.searchParams.get('site', '')
+    },
+    viewer_name() {
+      return this.normalized_url.searchParams.get('viewer', '')
     },
   },
 }
