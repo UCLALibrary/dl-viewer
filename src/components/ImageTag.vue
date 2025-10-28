@@ -7,7 +7,7 @@
 
 <script>
 export default {
-  name: "ImageTag",
+  name: 'ImageTag',
   props: {
     options: {
       // { src: [...] }
@@ -15,7 +15,7 @@ export default {
       required: true,
     },
   },
-};
+}
 </script>
 
 <style>

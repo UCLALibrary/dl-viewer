@@ -3,11 +3,7 @@
     <div class="modal">
       <div class="close-container">
         <button class="close-button" @click="closeModal">
-          <svg
-            class="close-icon"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-          >
+          <svg class="close-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
             <path
               d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"
             />
@@ -18,11 +14,7 @@
 
       <button class="collapse-button" @click="toggleCollapse">
         <div class="collapse-button-content">
-          <svg
-            class="collapse-icon"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-          >
+          <svg class="collapse-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
             <path v-if="collapsed" d="M10 17l5-5-5-5v10z" />
             <path v-else d="M12 7l5 5-5 5V7z" />
           </svg>
@@ -39,7 +31,7 @@
 
 <script>
 export default {
-  name: "AuthFirefoxModal",
+  name: 'AuthFirefoxModal',
   props: {
     title: {
       type: String,
@@ -54,17 +46,17 @@ export default {
     return {
       show: true,
       collapsed: true,
-    };
+    }
   },
   methods: {
     closeModal() {
-      this.show = false;
+      this.show = false
     },
     toggleCollapse() {
-      this.collapsed = !this.collapsed;
+      this.collapsed = !this.collapsed
     },
   },
-};
+}
 </script>
 
 <style>

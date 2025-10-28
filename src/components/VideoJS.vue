@@ -11,41 +11,37 @@
 </template>
 
 <script>
-import videojs from "video.js";
-import "video.js/dist/video-js.css";
+import videojs from 'video.js'
+import 'video.js/dist/video-js.css'
 
 export default {
-  name: "VideoPlayer",
+  name: 'VideoPlayer',
   props: {
     options: {
       type: Object,
       default() {
-        return {};
+        return {}
       },
     },
   },
   data() {
     return {
       player: null,
-    };
+    }
   },
   mounted() {
-    this.$gtm.enable(true);
-    this.player = videojs(
-      this.$refs.videoPlayer,
-      this.options,
-      function onPlayerReady() {
-        // console.log('onPlayerReady', this)
-      }
-    );
+    this.$gtm.enable(true)
+    this.player = videojs(this.$refs.videoPlayer, this.options, function onPlayerReady() {
+      // console.log('onPlayerReady', this)
+    })
   },
   beforeUnmount() {
     if (this.player) {
-      this.player.dispose();
+      this.player.dispose()
     }
-    this.$gtm.enable(false);
+    this.$gtm.enable(false)
   },
-};
+}
 </script>
 
 <style>
