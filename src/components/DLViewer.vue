@@ -10,6 +10,7 @@
 import axios from 'axios'
 import { defineAsyncComponent } from 'vue'
 import _get from 'lodash/get'
+import _isArray from 'lodash/isArray'
 
 export default {
   name: 'DLViewer',
@@ -82,10 +83,13 @@ export default {
       return this.firstItemType == 'Video' || this.firstItemTypeFromChoice == 'Video'
     },
     isV3Manifest() {
-      return (
-        this.iiif_manifest &&
-        this.iiif_manifest['@context'] == 'http://iiif.io/api/presentation/3/context.json'
-      )
+      const v3_context = 'http://iiif.io/api/presentation/3/context.json'
+      const context = _get(this.iiif_manifest, '@context')
+      if (_isArray(context)) {
+        return context.includes(v3_context)
+      } else {
+        return context == v3_context
+      }
     },
     options() {
       if (this.iiif_manifest == {}) {
