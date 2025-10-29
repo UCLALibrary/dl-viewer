@@ -2,9 +2,9 @@ name: Run CI Suite
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -14,15 +14,19 @@ jobs:
   cypress:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v3
-      with:
-        node-version: 16
-        cache: 'npm'
-    - uses: cypress-io/github-action@224f894ce0b082eba28a3a4562f630c54a17b432
-      with:
-        start: npm run serve
-        wait-on: 'http://localhost:8080'
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: 'npm'
+      - run: npm install && npm run build
+      - uses: cypress-io/github-action@224f894ce0b082eba28a3a4562f630c54a17b432
+        with:
+          config-file: cypress.config.ts
+          start: npm run preview
+          wait-on: 'http://localhost:4173'
+        env:
+          CYPRESS_BASE_URL: http://localhost:4173
 
   deploy:
     # needs: cypress
@@ -31,7 +35,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 22
           cache: 'npm'
       - name: set deployment parameters
         run: |

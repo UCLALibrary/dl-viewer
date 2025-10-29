@@ -1,1 +1,2 @@
 import "cypress-iframe";
+export {}
