@@ -8,16 +8,8 @@
   />
 </template>
 
-<script>
-/* eslint-disable */
-
+<script lang="ts">
 export default {
-  props: {
-    options: {
-      type: Object,
-      required: true,
-    },
-  },
   computed: {
     iframe_target_url() {
       // console.log("viewer 4")
