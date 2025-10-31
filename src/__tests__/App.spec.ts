@@ -1,7 +1,6 @@
 import { describe, it, expect } from 'vitest'
 
 import { mount } from '@vue/test-utils'
-// @ts-expect-error: ignore missing declaration for .vue module
 import App from '../App.vue'
 
 describe('App', () => {

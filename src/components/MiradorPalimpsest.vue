@@ -8,16 +8,10 @@
   />
 </template>
 
-<script>
+<script lang="ts">
 /* eslint-disable */
 
 export default {
-  props: {
-    options: {
-      type: Object,
-      required: true,
-    },
-  },
   computed: {
     iframe_target_url() {
       const querystring = new URL(window.location.toString().replace('#?', '?')).search // for some reason the URL format we inherited used '#?' to indicate query parameters, but URLSearchParams won't parse this.
