@@ -3,6 +3,7 @@
     v-if="iiif_manifest_url && iiif_manifest_url.length > 0"
     :iiif_manifest_url="iiif_manifest_url"
     :site="site"
+    :viewer_name="viewer_name"
   />
 </template>
 
@@ -24,7 +25,8 @@ export default {
       if (
         iiif_url &&
         iiif_url.includes('library.ucla.edu/') &&
-        !iiif_url.includes('library.ucla.edu/collection')
+        !iiif_url.includes('library.ucla.edu/collection') &&
+        !iiif_url.includes('sinai-images.library.ucla.edu')
       ) {
         const split_url = iiif_url.split('library.ucla.edu/')
         if (split_url.length >= 2 && _isString(split_url[1])) {
@@ -36,6 +38,9 @@ export default {
     },
     site() {
       return this.normalized_url.searchParams.get('site') || undefined
+    },
+    viewer_name() {
+      return this.normalized_url.searchParams.get('viewer') || undefined
     },
   },
 }

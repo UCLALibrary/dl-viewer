@@ -1,7 +1,6 @@
 <template>
   <div class="dl-viewer" v-if="iiif_manifest">
-    <mirador-palimpsest v-if="isSinaiPalimpsest" />
-    <MiradorViewer v-else-if="isSinai" />
+    <MiradorViewer v-if="isSinai" :iiif_manifest_url="iiif_manifest_url" />
     <UniversalViewer v-else-if="isCollection" />
     <VideoJS v-else-if="isVideo" :iiif_manifest="iiif_manifest" />
     <UniversalViewer3 v-else-if="isSound" />
@@ -24,12 +23,19 @@ import _isString from 'lodash/isString'
 import _isUndefined from 'lodash/isUndefined'
 import { presentation3StrictUpgrade } from '@iiif/parser/strict'
 
+const VIEWER_ALIASES = {
+  mirador: 'MiradorViewer',
+  img: 'ImageTag',
+  vidoejs: 'VideoJS',
+  uv: 'UniversalViewer',
+  uv3: 'UniversalViewer3',
+}
+
 export default {
   name: 'DLViewer',
   components: {
     ImageTag: defineAsyncComponent(() => import('./ImageTag.vue')),
     MiradorViewer: defineAsyncComponent(() => import('./MiradorViewer.vue')),
-    MiradorPalimpsest: defineAsyncComponent(() => import('./MiradorPalimpsest.vue')),
     VideoJS: defineAsyncComponent(() => import('./VideoJS.vue')),
     UniversalViewer: defineAsyncComponent(() => import('./UniversalViewer.vue')),
     UniversalViewer3: defineAsyncComponent(() => import('./UniversalViewer3.vue')),
@@ -40,6 +46,10 @@ export default {
       required: true,
     },
     site: {
+      type: String,
+      default: '',
+    },
+    viewer_name: {
       type: String,
       default: '',
     },
@@ -97,9 +107,6 @@ export default {
     },
     isSinai() {
       return this.site === 'sinai'
-    },
-    isSinaiPalimpsest() {
-      return this.iiif_manifest_url.includes('sinai-images.library.ucla.edu')
     },
     isSound() {
       return this.firstItemType == 'Sound' || this.firstItemTypeFromChoice == 'Sound'
