@@ -1,5 +1,5 @@
 import { createApp } from 'vue'
-import { createGtm } from 'vue-gtm'
+import { createGtm } from '@gtm-support/vue-gtm'
 import App from './App.vue'
 
 const app = createApp(App)
