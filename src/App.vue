@@ -3,10 +3,12 @@
     v-if="iiif_manifest_url && iiif_manifest_url.length > 0"
     :iiif_manifest_url="iiif_manifest_url"
     :site="site"
+    :canvas="canvas"
   />
 </template>
 
 <script lang="ts">
+import { toInteger } from 'lodash'
 import DLViewer from './components/DLViewer.vue'
 import _isString from 'lodash/isString'
 
@@ -33,6 +35,9 @@ export default {
         }
       }
       return iiif_url
+    },
+    canvas() {
+      return toInteger(this.normalized_url.searchParams.get('cv')) || undefined
     },
     site() {
       return this.normalized_url.searchParams.get('site') || undefined
