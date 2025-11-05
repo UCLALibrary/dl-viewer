@@ -2,15 +2,11 @@
   <div class="dl-viewer" v-if="iiif_manifest">
     <mirador-palimpsest v-if="isSinaiPalimpsest" />
     <MiradorViewer v-else-if="isSinai" />
-    <UniversalViewer
-      v-else-if="isCollection"
-      :iiif_manifest_url="iiif_manifest_url"
-      :canvas="canvas"
-    />
+    <UniversalViewer v-else-if="isCollection" />
     <VideoJS v-else-if="isVideo" :iiif_manifest="iiif_manifest" />
     <UniversalViewer3 v-else-if="isSound" />
     <ImageTag v-else-if="isImage && !hasIiifService" :iiif_manifest="iiif_manifest" />
-    <UniversalViewer v-else :iiif_manifest_url="iiif_manifest_url" :canvas="canvas" />
+    <UniversalViewer v-else :isSound="isSound" />
   </div>
 </template>
 
@@ -47,10 +43,6 @@ export default {
     site: {
       type: String,
       default: '',
-    },
-    canvas: {
-      type: Number,
-      default: 0,
     },
   },
   data() {
