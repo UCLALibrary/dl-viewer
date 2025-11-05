@@ -1,12 +1,13 @@
 <template>
   <div class="dl-viewer" v-if="iiif_manifest">
-    <mirador-palimpsest v-if="isSinaiPalimpsest" />
-    <MiradorViewer v-else-if="isSinai" />
-    <UniversalViewer v-else-if="isCollection" />
-    <VideoJS v-else-if="isVideo" :iiif_manifest="iiif_manifest" />
-    <UniversalViewer3 v-else-if="isSound" />
+    <MiradorViewer4 v-if="useMirador4" :iiif_manifest_url="iiif_manifest_url" />
+    <mirador-palimpsest v-if="useMiradorPalimpsest" />
+    <MiradorViewer v-else-if="useMirador3" />
+    <!-- <UniversalViewer v-else-if="isCollection" /> -->
+    <VideoJS v-else-if="useVideoJs" :iiif_manifest="iiif_manifest" />
+    <UniversalViewer3 v-else-if="useUniversalViewer3" />
     <ImageTag v-else-if="isImage && !hasIiifService" :iiif_manifest="iiif_manifest" />
-    <UniversalViewer v-else :isSound="isSound" />
+    <UniversalViewer v-else />
   </div>
 </template>
 
@@ -25,12 +26,21 @@ import _isUndefined from 'lodash/isUndefined'
 import { presentation3StrictUpgrade } from '@iiif/parser/strict'
 import { type Manifest } from '@iiif/presentation-3'
 
+const VIEWER_ALIASES = {
+  mirador: 'MiradorViewer',
+  img: 'ImageTag',
+  vidoejs: 'VideoJS',
+  uv: 'UniversalViewer',
+  uv3: 'UniversalViewer3',
+}
+
 export default {
   name: 'DLViewer',
   components: {
     ImageTag: defineAsyncComponent(() => import('./ImageTag.vue')),
     MiradorViewer: defineAsyncComponent(() => import('./MiradorViewer.vue')),
     MiradorPalimpsest: defineAsyncComponent(() => import('./MiradorPalimpsest.vue')),
+    MiradorViewer4: defineAsyncComponent(() => import('./MiradorViewer4.vue')),
     VideoJS: defineAsyncComponent(() => import('./VideoJS.vue')),
     UniversalViewer: defineAsyncComponent(() => import('./UniversalViewer.vue')),
     UniversalViewer3: defineAsyncComponent(() => import('./UniversalViewer3.vue')),
@@ -41,6 +51,10 @@ export default {
       required: true,
     },
     site: {
+      type: String,
+      default: '',
+    },
+    viewer_name: {
       type: String,
       default: '',
     },
@@ -89,29 +103,20 @@ export default {
     isImage() {
       return this.firstItemType == 'Image'
     },
-    isSinai() {
-      return this.site === 'sinai'
+    useMirador3() {
+      return this.viewer_name === 'mirador' || this.viewer_name === 'mirador3' || this.site==='sinai'
     },
-    isSinaiPalimpsest() {
+    useMirador4() {
+      return this.viewer_name === 'mirador4'
+    },
+    useMiradorPalimpsest() {
       return this.iiif_manifest_url.includes('sinai-images.library.ucla.edu')
     },
-    isSound() {
-      return this.firstItemType == 'Sound' || this.firstItemTypeFromChoice == 'Sound'
+    useUniversalViewer3() {
+      return !this.isCollection && (this.firstItemType == 'Sound' || this.firstItemTypeFromChoice == 'Sound')
     },
-    isVideo() {
-      return this.firstItemType == 'Video' || this.firstItemTypeFromChoice == 'Video'
-    },
-    isV3Manifest() {
-      const v3_context = 'http://iiif.io/api/presentation/3/context.json'
-      const context = _get(this.iiif_manifest, '@context')
-      if (_isArray(context)) {
-        return context.includes(v3_context)
-      } else {
-        return context == v3_context
-      }
-    },
-    isAppleOrIOS() {
-      return /(Apple|iOS)/.test(navigator.userAgent)
+    useVideoJs() {
+      return !this.isCollection && (this.firstItemType == 'Video' || this.firstItemTypeFromChoice == 'Video')
     },
   },
   async mounted() {
