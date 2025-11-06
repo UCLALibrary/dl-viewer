@@ -46,9 +46,6 @@ onMounted(() => {
       galleryView: {
         height: 200,
       },
-      osdConfig: {
-        preserveViewport: false,
-      },
       theme: {
         palette: {
           notification: {
