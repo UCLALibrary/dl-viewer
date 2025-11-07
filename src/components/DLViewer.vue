@@ -5,6 +5,11 @@
     <MiradorViewer v-else-if="useMirador3" />
     <!-- <UniversalViewer v-else-if="isCollection" /> -->
     <VideoJS v-else-if="useVideoJs" :iiif_manifest="iiif_manifest" />
+    <UniversalViewerLatest
+      v-else-if="useUniversalViewerLatest"
+      :iiif_manifest_url="iiif_manifest_url"
+      :canvas="canvas"
+    />
     <UniversalViewer3 v-else-if="useUniversalViewer3" />
     <ImageTag v-else-if="isImage && !hasIiifService" :iiif_manifest="iiif_manifest" />
     <UniversalViewer v-else />
@@ -25,6 +30,7 @@ import _isString from 'lodash/isString'
 import _isUndefined from 'lodash/isUndefined'
 import { presentation3StrictUpgrade } from '@iiif/parser/strict'
 import { type Manifest } from '@iiif/presentation-3'
+import type UniversalViewerLatest from './UniversalViewerLatest.vue'
 
 const VIEWER_ALIASES = {
   mirador: 'MiradorViewer',
@@ -44,6 +50,7 @@ export default {
     VideoJS: defineAsyncComponent(() => import('./VideoJS.vue')),
     UniversalViewer: defineAsyncComponent(() => import('./UniversalViewer.vue')),
     UniversalViewer3: defineAsyncComponent(() => import('./UniversalViewer3.vue')),
+    UniversalViewerLatest: defineAsyncComponent(() => import('./UniversalViewerLatest.vue')),
   },
   props: {
     iiif_manifest_url: {
@@ -57,6 +64,10 @@ export default {
     viewer_name: {
       type: String,
       default: '',
+    },
+    canvas: {
+      type: Number,
+      default: 0,
     },
   },
   data() {
@@ -104,7 +115,9 @@ export default {
       return this.firstItemType == 'Image'
     },
     useMirador3() {
-      return this.viewer_name === 'mirador' || this.viewer_name === 'mirador3' || this.site==='sinai'
+      return (
+        this.viewer_name === 'mirador' || this.viewer_name === 'mirador3' || this.site === 'sinai'
+      )
     },
     useMirador4() {
       return this.viewer_name === 'mirador4'
@@ -112,11 +125,20 @@ export default {
     useMiradorPalimpsest() {
       return this.iiif_manifest_url.includes('sinai-images.library.ucla.edu')
     },
+    useUniversalViewerLatest() {
+      return this.viewer_name === 'uv-latest'
+    },
     useUniversalViewer3() {
-      return !this.isCollection && (this.firstItemType == 'Sound' || this.firstItemTypeFromChoice == 'Sound')
+      return (
+        !this.isCollection &&
+        (this.firstItemType == 'Sound' || this.firstItemTypeFromChoice == 'Sound')
+      )
     },
     useVideoJs() {
-      return !this.isCollection && (this.firstItemType == 'Video' || this.firstItemTypeFromChoice == 'Video')
+      return (
+        !this.isCollection &&
+        (this.firstItemType == 'Video' || this.firstItemTypeFromChoice == 'Video')
+      )
     },
   },
   async mounted() {
