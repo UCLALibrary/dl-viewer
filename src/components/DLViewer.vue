@@ -1,8 +1,6 @@
 <template>
   <div class="dl-viewer" v-if="iiif_manifest">
     <MiradorViewer4 v-if="useMirador4" :iiif_manifest_url="iiif_manifest_url" />
-    <mirador-palimpsest v-if="useMiradorPalimpsest" />
-    <MiradorViewer v-else-if="useMirador3" />
     <!-- <UniversalViewer v-else-if="isCollection" /> -->
     <VideoJS v-else-if="useVideoJs" :iiif_manifest="iiif_manifest" />
     <UniversalViewerLatest
@@ -44,8 +42,6 @@ export default {
   name: 'DLViewer',
   components: {
     ImageTag: defineAsyncComponent(() => import('./ImageTag.vue')),
-    MiradorViewer: defineAsyncComponent(() => import('./MiradorViewer.vue')),
-    MiradorPalimpsest: defineAsyncComponent(() => import('./MiradorPalimpsest.vue')),
     MiradorViewer4: defineAsyncComponent(() => import('./MiradorViewer4.vue')),
     VideoJS: defineAsyncComponent(() => import('./VideoJS.vue')),
     UniversalViewer: defineAsyncComponent(() => import('./UniversalViewer.vue')),
@@ -114,16 +110,10 @@ export default {
     isImage() {
       return this.firstItemType == 'Image'
     },
-    useMirador3() {
-      return (
-        this.viewer_name === 'mirador' || this.viewer_name === 'mirador3' || this.site === 'sinai'
-      )
-    },
     useMirador4() {
-      return this.viewer_name === 'mirador4'
-    },
-    useMiradorPalimpsest() {
-      return this.iiif_manifest_url.includes('sinai-images.library.ucla.edu')
+      return (
+        this.viewer_name === 'mirador' || this.viewer_name === 'mirador4' || this.site === 'sinai'
+      )
     },
     useUniversalViewerLatest() {
       return this.viewer_name === 'uv-latest'
