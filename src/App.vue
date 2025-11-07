@@ -4,6 +4,7 @@
     :iiif_manifest_url="iiif_manifest_url"
     :site="site"
     :viewer_name="viewer_name"
+    :canvas="canvas"
   />
 </template>
 
@@ -41,6 +42,14 @@ export default {
     },
     viewer_name() {
       return this.normalized_url.searchParams.get('viewer') || undefined
+    },
+    canvas() {
+      const as_str = this.normalized_url.searchParams.get('cv')
+      if (as_str) {
+        return parseInt(as_str)
+      } else {
+        return undefined
+      }
     },
   },
 }
