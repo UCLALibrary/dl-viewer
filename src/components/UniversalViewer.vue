@@ -41,10 +41,9 @@ const UV_CONFIG = {
     },
     downloadDialogue: {
       options: {
+        // Sizes the "small image" option; UV's default is 1000.
         confinedImageSize: 200,
-        currentViewDisabledPercentage: 90,
         maxImageWidth: 5000,
-        optionsExplanatoryTextEnabled: true,
         selectionEnabled: false,
       },
     },
