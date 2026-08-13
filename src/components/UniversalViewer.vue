@@ -1,31 +1,77 @@
-<template>
-  <iframe
-    class="universalviewer"
-    :src="iframe_target_url"
-    id="universalviewer-iframe"
-    allowfullscreen
-    frameborder="0"
-  />
-</template>
+<template><div id="uv" class="uv" allowfullscreen frameborder="0" /></template>
 
-<script lang="ts">
-/* eslint-disable */
+<script setup lang="ts">
+import { init } from 'universalviewer'
+import 'universalviewer/dist/esm/index.css'
+import { onMounted } from 'vue'
 
-export default {
-  computed: {
-    iframe_target_url() {
-      // console.log("viewer 4")
-      const fixed_url = new URL(window.location.toString().replace('#?', '?')) // for some reason the URL format we inherited used '#?' to indicate query parameters, but URLSearchParams won't parse this.
-      console.log(`uv.html#${fixed_url.search}`)
-      return `uv.html#${fixed_url.search}`
+const UV_CONFIG = {
+  options: {
+    rightPanelEnabled: false,
+  },
+  modules: {
+    contentLeftPanel: {
+      options: {
+        defaultToTreeEnabled: true,
+      },
+    },
+    headerPanel: {
+      options: {
+        settingsButtonEnabled: true,
+      },
+    },
+    footerPanel: {
+      options: {
+        downloadEnabled: true,
+        moreInfoEnabled: false,
+        printEnabled: false,
+        shareEnabled: false,
+      },
+      content: {
+        download: 'Download ',
+        exitFullScreen: 'Exit Full Screen',
+        fullScreen: 'Full Screen',
+      },
+    },
+    downloadDialogue: {
+      options: {
+        confinedImageSize: 200,
+        currentViewDisabledPercentage: 90,
+        maxImageWidth: 5000,
+        optionsExplanatoryTextEnabled: true,
+        selectionEnabled: false,
+      },
     },
   },
 }
+
+const props = defineProps({
+  iiif_manifest_url: {
+    type: String,
+    required: true,
+  },
+  canvas: {
+    type: Number,
+    default: 0,
+  },
+})
+
+onMounted(() => {
+  const uv = init('uv', {
+    manifest: props.iiif_manifest_url,
+    canvasIndex: props.canvas,
+    embedded: true,
+  })
+
+  uv.on('configure', function ({ cb }: { cb: (config: unknown) => void }) {
+    cb(Promise.resolve(UV_CONFIG))
+  })
+})
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.universalviewer {
+.uv {
   width: 100%;
   height: 100%;
 }
