@@ -38,8 +38,8 @@ describe('A manuscript', () => {
     // "Print" is disabled
     cy.contains('Print').should('exist').should('not.be.visible')
 
-    // XFAIL "Share" is disabled — see image.spec.js; shareEnabled:false is ignored from 4.2.1 on.
-    // cy.contains('Share').should('exist').should('not.be.visible')
+    // "Share" is hidden with CSS — see image.spec.js
+    cy.get('button.share').should('exist').should('not.be.visible')
 
     // Fullscreen button
     cy.contains('Full Screen').should('exist').should('be.visible')

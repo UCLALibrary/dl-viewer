@@ -17,10 +17,9 @@ describe('A simple image', () => {
     // "Print" is disabled
     cy.contains('Print').should('exist').should('not.be.visible')
 
-    // XFAIL "Share" is disabled — footerPanel.options.shareEnabled:false was honored in 4.0.21
-    // but is ignored from 4.2.1 onward, so the Share button is now visible to users. Upstream
-    // UV bug; re-enable this assertion if it's fixed.
-    // cy.contains('Share').should('exist').should('not.be.visible')
+    // "Share" is hidden. NB this is done with CSS in UniversalViewer.vue, not config —
+    // footerPanel.options.shareEnabled is ignored from UV 4.1/4.2 onward.
+    cy.get('button.share').should('exist').should('not.be.visible')
 
     // Enter / exit fullcreen view
     cy.contains('Full Screen').should('exist').should('be.visible')

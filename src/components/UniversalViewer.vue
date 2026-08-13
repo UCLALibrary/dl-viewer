@@ -33,6 +33,12 @@ const UV_CONFIG = {
         fullScreen: 'Full Screen',
       },
     },
+    shareDialogue: {
+      options: {
+        // Embed generates an iframe pointing at /uv.html, which this app no longer ships.
+        embedEnabled: false,
+      },
+    },
     downloadDialogue: {
       options: {
         confinedImageSize: 200,
@@ -74,5 +80,14 @@ onMounted(() => {
 .uv {
   width: 100%;
   height: 100%;
+}
+
+/*
+ * Hide the Share button. UV ignores footerPanel.options.shareEnabled, so this has to be CSS.
+ * :deep() and !important are both required — UV renders its own DOM and its selectors are more
+ * specific than a scoped rule can be.
+ */
+.uv :deep(.share) {
+  display: none !important;
 }
 </style>
