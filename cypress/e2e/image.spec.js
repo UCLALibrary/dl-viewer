@@ -27,7 +27,7 @@ describe('A simple image', () => {
     // Download button enabled
     cy.contains('Download').should('exist').should('be.visible')
 
-    // No right panel
-    cy.get('.rightPanel').should('not.be.visible')
+    // Right panel is enabled, but starts collapsed to a "More Information" tab
+    cy.get('.rightPanel').should('exist').should('be.visible')
   })
 })

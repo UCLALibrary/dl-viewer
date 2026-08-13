@@ -7,7 +7,7 @@ import { onMounted } from 'vue'
 
 const UV_CONFIG = {
   options: {
-    rightPanelEnabled: false,
+    rightPanelEnabled: true,
   },
   modules: {
     contentLeftPanel: {
