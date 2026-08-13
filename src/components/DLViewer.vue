@@ -6,7 +6,6 @@
     <!-- <UniversalViewer v-else-if="isCollection" /> -->
     <VideoJS v-else-if="useVideoJs" :iiif_manifest="iiif_manifest" />
     <UniversalViewer3 v-else-if="useUniversalViewer3" />
-    <ImageTag v-else-if="isImage && !hasIiifService" :iiif_manifest="iiif_manifest" />
     <UniversalViewer v-else :iiif_manifest_url="iiif_manifest_url" :canvas="canvas" />
   </div>
 </template>
@@ -37,7 +36,6 @@ const VIEWER_ALIASES = {
 export default {
   name: 'DLViewer',
   components: {
-    ImageTag: defineAsyncComponent(() => import('./ImageTag.vue')),
     MiradorViewer: defineAsyncComponent(() => import('./MiradorViewer.vue')),
     MiradorPalimpsest: defineAsyncComponent(() => import('./MiradorPalimpsest.vue')),
     MiradorViewer4: defineAsyncComponent(() => import('./MiradorViewer4.vue')),
@@ -92,10 +90,6 @@ export default {
         this.firstItemBody.items[0].type
       )
     },
-    hasIiifService() {
-      if (_has(this.firstItemBody, 'service')) return true
-      else return false
-    },
     isChoice() {
       return this.firstItemType == 'Choice'
     },
@@ -103,9 +97,6 @@ export default {
       const newLocal = _get(this.iiif_manifest, '@type') || _get(this.iiif_manifest, 'type', '')
       // Have seen "'@type': 'sc:Collection'" and "'type': 'Collection'"
       return newLocal.includes('Collection')
-    },
-    isImage() {
-      return this.firstItemType == 'Image'
     },
     useMirador3() {
       return (
