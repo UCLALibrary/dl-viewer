@@ -5,14 +5,8 @@
     <MiradorViewer v-else-if="useMirador3" />
     <!-- <UniversalViewer v-else-if="isCollection" /> -->
     <VideoJS v-else-if="useVideoJs" :iiif_manifest="iiif_manifest" />
-    <UniversalViewerLatest
-      v-else-if="useUniversalViewerLatest"
-      :iiif_manifest_url="iiif_manifest_url"
-      :canvas="canvas"
-    />
     <UniversalViewer3 v-else-if="useUniversalViewer3" />
-    <ImageTag v-else-if="isImage && !hasIiifService" :iiif_manifest="iiif_manifest" />
-    <UniversalViewer v-else />
+    <UniversalViewer v-else :iiif_manifest_url="iiif_manifest_url" :canvas="canvas" />
   </div>
 </template>
 
@@ -30,7 +24,6 @@ import _isString from 'lodash/isString'
 import _isUndefined from 'lodash/isUndefined'
 import { presentation3StrictUpgrade } from '@iiif/parser/strict'
 import { type Manifest } from '@iiif/presentation-3'
-import type UniversalViewerLatest from './UniversalViewerLatest.vue'
 
 const VIEWER_ALIASES = {
   mirador: 'MiradorViewer',
@@ -43,14 +36,12 @@ const VIEWER_ALIASES = {
 export default {
   name: 'DLViewer',
   components: {
-    ImageTag: defineAsyncComponent(() => import('./ImageTag.vue')),
     MiradorViewer: defineAsyncComponent(() => import('./MiradorViewer.vue')),
     MiradorPalimpsest: defineAsyncComponent(() => import('./MiradorPalimpsest.vue')),
     MiradorViewer4: defineAsyncComponent(() => import('./MiradorViewer4.vue')),
     VideoJS: defineAsyncComponent(() => import('./VideoJS.vue')),
     UniversalViewer: defineAsyncComponent(() => import('./UniversalViewer.vue')),
     UniversalViewer3: defineAsyncComponent(() => import('./UniversalViewer3.vue')),
-    UniversalViewerLatest: defineAsyncComponent(() => import('./UniversalViewerLatest.vue')),
   },
   props: {
     iiif_manifest_url: {
@@ -99,10 +90,6 @@ export default {
         this.firstItemBody.items[0].type
       )
     },
-    hasIiifService() {
-      if (_has(this.firstItemBody, 'service')) return true
-      else return false
-    },
     isChoice() {
       return this.firstItemType == 'Choice'
     },
@@ -110,9 +97,6 @@ export default {
       const newLocal = _get(this.iiif_manifest, '@type') || _get(this.iiif_manifest, 'type', '')
       // Have seen "'@type': 'sc:Collection'" and "'type': 'Collection'"
       return newLocal.includes('Collection')
-    },
-    isImage() {
-      return this.firstItemType == 'Image'
     },
     useMirador3() {
       return (
@@ -124,9 +108,6 @@ export default {
     },
     useMiradorPalimpsest() {
       return this.iiif_manifest_url.includes('sinai-images.library.ucla.edu')
-    },
-    useUniversalViewerLatest() {
-      return this.viewer_name === 'uv-latest'
     },
     useUniversalViewer3() {
       return (
