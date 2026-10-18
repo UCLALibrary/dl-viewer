@@ -38,7 +38,7 @@
     "universalviewer": "4.4.4",
     "universalviewer3": "npm:universalviewer@^3.1.4",
     "video.js": "^8.6.1",
-    "vue": "^3.5.22"
+    "vue": "^3.5.44"
   },
   "devDependencies": {
     "@tsconfig/node22": "^22.0.2",
